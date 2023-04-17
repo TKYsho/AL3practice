@@ -37,6 +37,13 @@ void GameScene::Initialize() {
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
+	// サウンドデータの読み込み
+	soundDataHandle_ = audio_->LoadWave("fanfare.wav");
+	//// 音声再生
+	//audio_->PlayWave(soundDataHandle_);
+	// ループ指定した音声再生
+	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
+
 	// ライン描画が参照するビュープロジェクションを指定する（アドレス渡し）
 	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
 
@@ -58,6 +65,13 @@ void GameScene::Update() {
 	position.y += 1.0f;
 	// 移動した座標をスプライトに反映
 	sprite_->SetPosition(position);
+
+	// スペースキーを押した瞬間
+	if (input_->TriggerKey(DIK_SPACE)) 
+	{
+		// 音声停止
+		audio_->StopWave(voiceHandle_);
+	}
 
 	//// デバッグテキストの表示
 	//ImGui::Text("Kamata Tarou %d %d %d", 2050, 12, 31);
