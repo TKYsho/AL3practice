@@ -30,6 +30,9 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_);
+
+	//// デバッグカメラの生成
+	//debugCamera_ = new DebugCamera()
 }
 
 void GameScene::Update() {
