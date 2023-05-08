@@ -7,6 +7,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 
 	delete model_;
+	delete debugCamera_;
 }
 
 void GameScene::Initialize() {
@@ -31,14 +32,41 @@ void GameScene::Initialize() {
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_);
 
-	//// デバッグカメラの生成
-	//debugCamera_ = new DebugCamera()
+	// デバッグカメラの生成
+	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 }
 
 void GameScene::Update() {
 
 	// 自キャラの更新
 	player_->Update();
+
+	// Debug時のみデバッグカメラ有効フラグを切り替える
+#ifdef _DEBUG
+
+	// Cキーでフラグ切り替え
+	if (input_->TriggerKey(DIK_C)) {
+
+		//if (isActiveDebugCamera_ == false) {
+			isActiveDebugCamera_ = true;
+		//} else {
+		//	isActiveDebugCamera_ = false;
+		//}
+	}
+
+#endif
+
+	//if (isActiveDebugCamera_ == true) {
+	
+		debugCamera_->Update();
+		//viewProjection_.matView = ;
+		//viewProjection_.matProjection = ;
+		//// ビュープロジェクション行列の転送
+		//viewProjection_.TransferMatrix();
+	//} //else {
+	//	// ビュープロジェクション行列の更新と転送
+	//	viewProjection_.UpdateProjectionMatrix();
+	//}
 }
 
 void GameScene::Draw() {
@@ -69,7 +97,7 @@ void GameScene::Draw() {
 	/// </summary>
 	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	player_->Draw(viewProjection_);
-
+	
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
