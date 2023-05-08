@@ -47,26 +47,26 @@ void GameScene::Update() {
 	// Cキーでフラグ切り替え
 	if (input_->TriggerKey(DIK_C)) {
 
-		//if (isActiveDebugCamera_ == false) {
+		if (isActiveDebugCamera_ == false) {
 			isActiveDebugCamera_ = true;
-		//} else {
-		//	isActiveDebugCamera_ = false;
-		//}
+		} else {
+			isActiveDebugCamera_ = false;
+		}
 	}
 
 #endif
 
-	//if (isActiveDebugCamera_ == true) {
+	if (isActiveDebugCamera_ == true) {
 	
 		debugCamera_->Update();
 		//viewProjection_.matView = ;
 		//viewProjection_.matProjection = ;
-		//// ビュープロジェクション行列の転送
-		//viewProjection_.TransferMatrix();
-	//} //else {
-	//	// ビュープロジェクション行列の更新と転送
-	//	viewProjection_.UpdateProjectionMatrix();
-	//}
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
+	} else {
+		// ビュープロジェクション行列の更新と転送
+		viewProjection_.UpdateProjectionMatrix();
+	}
 }
 
 void GameScene::Draw() {
@@ -96,7 +96,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
-	player_->Draw(viewProjection_);
+	player_->Draw(debugCamera_->GetViewProjection());
 	
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
