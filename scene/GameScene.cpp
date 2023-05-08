@@ -1,6 +1,8 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "ImguiManager.h"
+#include "AxisIndicator.h"
 
 GameScene::GameScene() {}
 
@@ -34,6 +36,13 @@ void GameScene::Initialize() {
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
+
+#ifdef _DEBUG
+	// 軸方向表示の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(true);
+	// 軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+#endif
 }
 
 void GameScene::Update() {
@@ -44,19 +53,30 @@ void GameScene::Update() {
 	// Debug時のみデバッグカメラ有効フラグを切り替える
 #ifdef _DEBUG
 
-	// Cキーでフラグ切り替え
-	if (input_->TriggerKey(DIK_C)) {
+	// Tキーでフラグ切り替え
+	if (input_->TriggerKey(DIK_T)) {
 
-		if (isActiveDebugCamera_ == false) {
-			isActiveDebugCamera_ = true;
-		} else {
+		if (isActiveDebugCamera_) {
 			isActiveDebugCamera_ = false;
+		} else {
+			isActiveDebugCamera_ = true;
 		}
 	}
 
+	// デバッグテキストでデバッグカメラのON/OFFの状況を表示
+	ImGui::Begin("isActiveDebugCamera");
+	ImGui::Text("push T : toggle ON / OFF");
+	if (isActiveDebugCamera_) {
+		ImGui::Text("debugCamera : ON");
+	} else {
+		ImGui::Text("debugCamera : OFF");
+	}
+	ImGui::End();
+
 #endif
 
-	if (isActiveDebugCamera_ == true) {
+	
+	if (isActiveDebugCamera_) {
 	
 		debugCamera_->Update();
 		//viewProjection_.matView = ;
