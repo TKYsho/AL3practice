@@ -18,6 +18,15 @@ void Player::Initialize(Model* model, uint32_t textureHandle){
 	input_ = Input::GetInstance();
 }
 
+Player::~Player() {
+
+	// bullet_の開放
+	//delete bullets_;
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
+}
+
 void Player::Update() {
 
 	// 行列を定数バッファに転送
@@ -60,17 +69,34 @@ void Player::Update() {
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
+	// 旋回処理
+	Rotate();
+
 	// 座標移動（ベクトルの加算）
 	worldTransform_.translation_.x += move.x;
 	worldTransform_.translation_.y += move.y;
 	worldTransform_.translation_.z += move.z;
 
-	// ワールド行列にアフィン変換行列を代入
-	worldTransform_.matWorld_ = MakeAffineMatrix(
-	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	// キャラクター攻撃処理
+	Attack();
 
-	// 行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
+	// 弾更新
+	//if (bullets_) {
+	//	bullets_->Update();
+	//}
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
+	}
+
+	// ワールドトランスフォームの更新(下二つの処理の代わりになる)
+	worldTransform_.UpdateMatrix();
+
+	//// ワールド行列にアフィン変換行列を代入
+	//worldTransform_.matWorld_ = MakeAffineMatrix(
+	//    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
+	//// 行列を定数バッファに転送
+	//worldTransform_.TransferMatrix();
 
 	
 #ifdef _DEBUG // デバッグ時のみデバッグウィンドウを表示（Update関数の中に実装する）
@@ -92,10 +118,49 @@ void Player::Update() {
 #endif // _DEBUG
 }
 
+void Player::Rotate() {
+
+	// 回転速さ[ラジアン/frame]
+	//const float kRotSpeed = 0.02f;
+
+	// 押した方向で移動ベクトルを変更
+	if (input_->PushKey(DIK_A)) {
+		worldTransform_.rotation_.y -= 0.02f;
+	} else if (input_->PushKey(DIK_D)) {
+		worldTransform_.rotation_.y += 0.02f;
+	}
+}
+
+void Player::Attack() {
+
+	// spaceキーで弾を発射
+	if (input_->PushKey(DIK_SPACE)) {
+
+		//// 既に弾があればメモリを開放する
+		//if (bullets_) {
+		//	delete bullets_;
+		//	bullets_ = nullptr;
+		//}
+
+		// 弾を生成し、初期化
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(model_, worldTransform_.translation_);
+
+		// 弾を登録する
+		bullets_.push_back(newBullet);
+	}
+}
 
 void Player::Draw(const ViewProjection viewProjection) {
 
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-}
 
+	// 弾描画
+	//if (bullets_) {
+	//	bullets_->Draw(viewProjection);
+	//}
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection);
+	}
+}
