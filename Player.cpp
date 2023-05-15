@@ -143,7 +143,7 @@ void Player::Rotate() {
 void Player::Attack() {
 
 	// spaceキーで弾を発射
-	if (input_->PushKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 
 		//// 既に弾があればメモリを開放する
 		//if (bullets_) {
