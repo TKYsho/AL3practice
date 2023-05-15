@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "PlayerBullet.h"
 #include <list>
+#include "MathUtility.h"
 
 /// <summary>
 /// 自キャラ
@@ -45,6 +46,7 @@ public:
 	/// 攻撃
 	/// </summary>
 	void Attack();
+
 
 private:
 	// ワールド変換データ
