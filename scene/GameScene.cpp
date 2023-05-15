@@ -9,6 +9,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 
 	delete model_;
+	delete enemy_;
 	delete debugCamera_;
 }
 
@@ -34,6 +35,14 @@ void GameScene::Initialize() {
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_);
 
+	// 敵の生成
+	enemy_ = new Enemy();
+	// 敵の速度
+	const float kEnemySpeed = -1.0f;
+	Vector3 velocity(0, 0, kEnemySpeed);
+	// 敵の初期化
+	enemy_->Initialize(model_, { 0, 2.0f, 50.0f }, velocity);
+
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
@@ -49,6 +58,11 @@ void GameScene::Update() {
 
 	// 自キャラの更新
 	player_->Update();
+
+	// 敵の更新(Enemyがnullでないときだけ)
+	if (enemy_){
+		enemy_->Update();
+	}
 
 	// Debug時のみデバッグカメラ有効フラグを切り替える
 #ifdef _DEBUG
@@ -117,6 +131,11 @@ void GameScene::Draw() {
 	/// </summary>
 	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	player_->Draw(debugCamera_->GetViewProjection());
+
+	// 敵の描画(Enemyがnullでないときだけ)
+	if (enemy_) {
+		enemy_->Draw(viewProjection_);
+	}
 	
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
