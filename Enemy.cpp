@@ -18,14 +18,46 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 
 	// 引数で受け取った速度をセット
 	velocity_ = velocity;
+
+	//// 接近処理メンバ関数に関数のアドレスを代入
+	//pApproachUpdate = &Enemy::ApproachUpdate;
+
 }
+
+// フェーズの関数テーブル
+void (Enemy::*Enemy::spPhase[])() = {
+    &Enemy::ApproachUpdate, // 接近 要素番号0
+    &Enemy::LeaveUpdate     // 離脱 要素番号1
+};
 
 void Enemy::Update() {
 
-	// 座標を移動させる
-	worldTransform_.translation_.x += velocity_.x;
-	worldTransform_.translation_.y += velocity_.y;
-	worldTransform_.translation_.z += velocity_.z;
+	// 敵行動パターン
+	//switch (phase_) { 
+	//case Phase::Approach:	// 接近
+	//	//// 接近処理
+	//	//ApproachUpdate();
+	//	
+	//	//// 接近処理メンバ関数ポインタ内の関数を呼び出す
+	//	//(this->*pApproachUpdate)();
+
+	//	// メンバ関数テーブル内の関数を呼び出す
+	//	(this->*spPhase[0])();
+	//	break;
+
+	//case Phase::Leave:		// 離脱
+	//	// 離脱処理
+	//	LeaveUpdate();
+	//	break;
+	//}
+
+	// メンバ関数テーブル内の関数を呼び出す
+	if (static_cast<size_t>(phase_) == 0) {
+		// メンバ関数テーブル内の関数を呼び出す
+		(this->*spPhase[0])();
+	} else if(static_cast<size_t>(phase_) == 1) {
+		(this->*spPhase[1])();
+	}
 
 	// ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
@@ -35,4 +67,22 @@ void Enemy::Draw(const ViewProjection& viewProjection) {
 
 	// モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+}
+
+void Enemy::ApproachUpdate() {
+	// 座標を移動させる
+	worldTransform_.translation_.x += approachVelocity_.x;
+	worldTransform_.translation_.y += approachVelocity_.y;
+	worldTransform_.translation_.z += approachVelocity_.z;
+	// 既定の位置に到達したら離脱フェーズへ
+	if (worldTransform_.translation_.z < 0.0f) {
+		phase_ = Phase::Leave;
+	}
+}
+
+void Enemy::LeaveUpdate() {
+	// 座標を移動させる
+	worldTransform_.translation_.x += leaveVelocity_.x;
+	worldTransform_.translation_.y += leaveVelocity_.y;
+	worldTransform_.translation_.z += leaveVelocity_.z;
 }
