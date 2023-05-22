@@ -70,7 +70,6 @@ void Enemy::Update() {
 
 	// メンバ関数テーブル内の関数を呼び出す
 	if (static_cast<size_t>(phase_) == 0) {
-		// メンバ関数テーブル内の関数を呼び出す
 		(this->*spPhase[0])();
 	} else if(static_cast<size_t>(phase_) == 1) {
 		(this->*spPhase[1])();
