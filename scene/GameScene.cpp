@@ -9,6 +9,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 
 	delete model_;
+	delete player_;
 	delete enemy_;
 	delete debugCamera_;
 }
@@ -41,7 +42,7 @@ void GameScene::Initialize() {
 	const float kEnemySpeed = -1.0f;
 	Vector3 velocity(0, 0, kEnemySpeed);
 	// 敵の初期化
-	enemy_->Initialize(model_, { 0, 2.0f, 50.0f }, velocity);
+	enemy_->Initialize(model_, { 10.0f, 2.0f, 50.0f }, velocity);
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
