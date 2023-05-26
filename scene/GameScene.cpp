@@ -43,6 +43,8 @@ void GameScene::Initialize() {
 	Vector3 velocity(0, 0, kEnemySpeed);
 	// 敵の初期化
 	enemy_->Initialize(model_, { 10.0f, 2.0f, 50.0f }, velocity);
+	// 敵に自キャラのアドレスを渡す
+	enemy_->SetPlayer(player_);
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);

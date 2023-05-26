@@ -146,10 +146,10 @@ void Player::Attack() {
 	if (input_->TriggerKey(DIK_SPACE)) {
 
 		//// 既に弾があればメモリを開放する
-		//if (bullets_) {
+		// if (bullets_) {
 		//	delete bullets_;
 		//	bullets_ = nullptr;
-		//}
+		// }
 
 		// 弾の速度
 		const float kBulletSpeed = 1.0f;
@@ -165,6 +165,17 @@ void Player::Attack() {
 		// 弾を登録する
 		bullets_.push_back(newBullet);
 	}
+}
+
+Vector3 Player::GetWorldPosition() { 
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+	// ワールド行列の平行移動行列を取得（ワールド座標）
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+	
+	return worldPos;
 }
 
 void Player::Draw(const ViewProjection viewProjection) {

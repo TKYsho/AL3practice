@@ -1,5 +1,7 @@
 ﻿#include "Enemy.h"
 #include <cassert>
+#include <cmath>
+#include "Player.h"
 
 void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity) { 
 	
@@ -123,8 +125,25 @@ void Enemy::LeaveUpdate() {
 void Enemy::Fire() {
 
 	// 弾の速度
-	const float kBulletSpeed = -1.0f;
-	Vector3 velocity(0, 0, kBulletSpeed);
+	const float kBulletSpeed = -0.04f;
+	//Vector3 velocity(0, 0, kBulletSpeed);
+
+	// 自キャラのワールド座標を取得する
+	Vector3 playerPos = player_->GetWorldPosition();
+	// 距離を求める
+	Vector3 distance{
+		worldTransform_.translation_.x - playerPos.x,
+		worldTransform_.translation_.y - playerPos.y,
+		worldTransform_.translation_.z - playerPos.z
+	};
+	// distanceを正規化する
+	Normalize(distance);
+	// ベクトルの長さを速さに合わせる
+	Vector3 velocity{
+	    distance.x * kBulletSpeed, 
+		distance.y * kBulletSpeed, 
+		distance.z * kBulletSpeed
+	};
 
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
@@ -132,6 +151,13 @@ void Enemy::Fire() {
 
 	// 弾を登録する
 	bullets_.push_back(newBullet);
+}
+
+Vector3 Enemy::Normalize(const Vector3& vector) { 
+	float length = sqrtf(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+	assert(length);
+	Vector3 dir = { vector.x / length, vector.y / length, vector.z / length };
+	return dir;
 }
 
 void Enemy::ApproachInitialize() {

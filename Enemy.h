@@ -5,6 +5,9 @@
 #include <ViewProjection.h>
 #include "EnemyBullet.h"
 
+// 自機クラスの前方宣言
+class Player;
+
 /// <summary>
 /// 敵
 /// </summary>
@@ -53,11 +56,19 @@ public:
 	/// </summary>
 	void Fire();
 
+	/// <summary>
+	/// 正規化
+	/// </summary>
+	Vector3 Normalize(const Vector3& vector);
+
 	// 発射間隔
 	static const int kFireInterval = 60;
 
 	// 接近フェーズ初期化
 	void ApproachInitialize();
+
+	// 自キャラの位置を変数にセットする
+	void SetPlayer(Player* player) { player_ = player; }
 
 private:
 	// ワールド変換データ
@@ -89,5 +100,8 @@ private:
 
 	// 発射タイマー
 	int32_t fireInterval = 0;
+
+	// 自キャラ
+	Player* player_ = nullptr;
 };
 
