@@ -45,6 +45,16 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 衝突判定と応答
+	/// </summary>
+	void CheckAllCollisions();
+
+	/// <summary>
+	/// AとBの距離を取得
+	/// </summary>
+	float GetDistance(const Vector3& posA, const Vector3& posB);
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;

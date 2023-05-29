@@ -168,14 +168,18 @@ void Player::Attack() {
 }
 
 Vector3 Player::GetWorldPosition() { 
-	// ワールド座標を入れる変数
-	Vector3 worldPos;
-	// ワールド行列の平行移動行列を取得（ワールド座標）
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	//// ワールド座標を入れる変数
+	//Vector3 worldPos;
+	//// ワールド行列の平行移動行列を取得（ワールド座標）
+	//worldPos.x = worldTransform_.translation_.x;
+	//worldPos.y = worldTransform_.translation_.y;
+	//worldPos.z = worldTransform_.translation_.z;
 	
-	return worldPos;
+	return worldTransform_.translation_;
+}
+
+void Player::OnCollision() {
+	// 何もしない
 }
 
 void Player::Draw(const ViewProjection viewProjection) {

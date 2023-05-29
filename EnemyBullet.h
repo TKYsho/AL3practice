@@ -26,9 +26,25 @@ public:
 	void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	Vector3 GetWorldPosition() { return worldTransform_.translation_; }
+
+	/// <summary>
 	/// デスフラグのゲッター
 	/// </summary>
 	bool IsDead() const { return isDead_; }
+
+	/// <summary>
+	/// 衝突を感知したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
+
+	/// <summary>
+	/// 半径を取得
+	/// </summary>
+	const float GetRadius() { return radius_; }
+	const float radius_ = 1.0f;
 
 private:
 	// ワールドトランスフォーム

@@ -67,8 +67,31 @@ public:
 	// 接近フェーズ初期化
 	void ApproachInitialize();
 
-	// 自キャラの位置を変数にセットする
+	/// <summary>
+	/// 自キャラの位置を変数にセットする
+	/// </summary>
 	void SetPlayer(Player* player) { player_ = player; }
+
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	Vector3 GetWorldPosition() { return worldTransform_.translation_; }
+
+	/// <summary>
+	/// 衝突を感知したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
+
+	/// <summary>
+	/// 弾リストを取得
+	/// </summary>
+	const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
+
+	/// <summary>
+	/// 半径を取得
+	/// </summary>
+	const float GetRadius() { return radius_; }
+	const float radius_ = 1.0f;
 
 private:
 	// ワールド変換データ

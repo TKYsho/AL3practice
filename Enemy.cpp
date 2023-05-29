@@ -164,3 +164,7 @@ void Enemy::ApproachInitialize() {
 	// 発射タイマーを初期化
 	fireInterval = kFireInterval;
 }
+
+void Enemy::OnCollision() {
+	// 何もしない
+}

@@ -38,3 +38,8 @@ void EnemyBullet::Draw(const ViewProjection& viewProjection) {
 	// モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
+
+void EnemyBullet::OnCollision() {
+	// 死亡フラグを立てる
+	isDead_ = true;
+}

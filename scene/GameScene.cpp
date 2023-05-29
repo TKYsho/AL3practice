@@ -59,6 +59,9 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	// 各当たり判定をチェック
+	CheckAllCollisions();
+
 	// 自キャラの更新
 	player_->Update();
 
@@ -66,6 +69,7 @@ void GameScene::Update() {
 	if (enemy_){
 		enemy_->Update();
 	}
+
 
 	// Debug時のみデバッグカメラ有効フラグを切り替える
 #ifdef _DEBUG
@@ -156,4 +160,87 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::CheckAllCollisions() {
+	// 判定対象AとBの座標
+	Vector3 posA, posB;
+
+	// 自弾リストの取得
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	// 敵弾リストの取得
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+
+	#pragma region 自キャラと敵弾の当たり判定
+
+	// 自キャラの座標
+	posA = player_->GetWorldPosition();
+
+	// 自キャラと敵弾全ての当たり判定
+	for (EnemyBullet* bullet : enemyBullets) {
+		// 敵弾の座標
+		posB = bullet->GetWorldPosition();
+		// 座標AとBの距離を求める
+		float distance = GetDistance(posA, posB);
+
+		// if(距離 <= (半径A + 半径B)²)
+		if (distance <= (player_->GetRadius() + bullet->GetRadius()) * (player_->GetRadius() + bullet->GetRadius())) {
+			// 自キャラの衝突時コールバックを呼び出す
+			player_->OnCollision();
+			// 敵弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+		}
+	}
+
+	#pragma endregion
+
+	#pragma region 自弾と敵キャラの当たり判定
+
+	// 敵キャラの座標
+	posA = enemy_->GetWorldPosition();
+
+	// 敵キャラと自弾全ての当たり判定
+	for (PlayerBullet* bullet : playerBullets) {
+		// 敵弾の座標
+		posB = bullet->GetWorldPosition();
+		// 座標AとBの距離を求める
+		float distance = GetDistance(posA, posB);
+
+		// if(距離 <= (半径A + 半径B)²)
+		if (distance <= (enemy_->GetRadius() + bullet->GetRadius()) * (enemy_->GetRadius() + bullet->GetRadius())) {
+			// 自キャラの衝突時コールバックを呼び出す
+			enemy_->OnCollision();
+			// 敵弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+		}
+	}
+
+	#pragma endregion
+
+	#pragma region 自キャラと敵キャラの当たり判定
+
+	// 自キャラの座標
+	posA = player_->GetWorldPosition();
+	// 敵キャラの座標
+	posB = enemy_->GetWorldPosition();
+	// 座標AとBの距離を求める
+	float distance = GetDistance(posA, posB);
+
+	// 衝突判定
+	if (distance <= (player_->GetRadius() + enemy_->GetRadius()) * (player_->GetRadius() + enemy_->GetRadius())) {
+		// 自キャラの衝突時コールバックを呼び出す
+		player_->OnCollision();
+		// 敵キャラの衝突時コールバックを呼び出す
+		enemy_->OnCollision();
+	}
+
+	#pragma endregion
+}
+
+float GameScene::GetDistance(const Vector3& posA, const Vector3& posB) { 
+	float distance = 
+		(posB.x - posA.x) * (posB.x - posA.x) + 
+		(posB.y - posA.y) * (posB.y - posA.y) +
+		(posB.z - posA.z) * (posB.z - posA.z);
+	return distance;
 }
