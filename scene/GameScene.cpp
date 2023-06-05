@@ -48,13 +48,14 @@ void GameScene::Initialize() {
 	// 敵に自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
 
+	// 天球3Dモデルの生成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
 	// 天球の生成
 	skydome_ = new Skydome();
 	// 天球の初期化
-	skydome_->Initialize(model_, { 0, 0, 0 });
-	// 3Dモデルの生成
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-
+	skydome_->Initialize(modelSkydome_, {0, 0, 0});
+	
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
@@ -106,13 +107,14 @@ void GameScene::Update() {
 	ImGui::End();
 
 #endif
-
 	
+	// デバッグカメラがONのとき
 	if (isActiveDebugCamera_) {
-	
+		// デバッグカメラ更新処理
 		debugCamera_->Update();
-		//viewProjection_.matView = ;
-		//viewProjection_.matProjection = ;
+		// オブジェクトの各行列を渡す
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
@@ -151,7 +153,7 @@ void GameScene::Draw() {
 	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 	// 自キャラの描画
-	player_->Draw(debugCamera_->GetViewProjection());
+	player_->Draw(viewProjection_);
 
 	// 敵の描画(Enemyがnullでないときだけ)
 	if (enemy_) {
