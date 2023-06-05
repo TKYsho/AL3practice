@@ -9,10 +9,9 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "DebugCamera.h"
-
-// プレイヤーヘッダー
 #include "Player.h"
 #include "Enemy.h"
+#include "Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -74,8 +73,13 @@ private: // メンバ変数
 	// 自キャラ
 	Player* player_ = nullptr;
 
-	// 敵
+	// 敵キャラ
 	Enemy* enemy_ = nullptr;
+
+	// 天球
+	Skydome* skydome_ = nullptr;
+	// 天球3Dモデル
+	Model* modelSkydome_ = nullptr;
 
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
