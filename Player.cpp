@@ -2,7 +2,7 @@
 #include <cassert>
 #include "ImGuiManager.h"
 
-void Player::Initialize(Model* model, uint32_t textureHandle){
+void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& position){
 
 	// NULLポインタチェック
 	assert(model);
@@ -13,6 +13,9 @@ void Player::Initialize(Model* model, uint32_t textureHandle){
 
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
+
+	// 引数で受け取った値をセット
+	worldTransform_.translation_ = position;
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -160,7 +163,7 @@ void Player::Attack() {
 
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+		newBullet->Initialize(model_, GetWorldPosition(), velocity);
 
 		// 弾を登録する
 		bullets_.push_back(newBullet);
@@ -168,18 +171,21 @@ void Player::Attack() {
 }
 
 Vector3 Player::GetWorldPosition() { 
-	//// ワールド座標を入れる変数
-	//Vector3 worldPos;
-	//// ワールド行列の平行移動行列を取得（ワールド座標）
-	//worldPos.x = worldTransform_.translation_.x;
-	//worldPos.y = worldTransform_.translation_.y;
-	//worldPos.z = worldTransform_.translation_.z;
-	
-	return worldTransform_.translation_;
+
+	Vector3 pos;
+	pos.x = worldTransform_.matWorld_.m[3][0];
+	pos.y = worldTransform_.matWorld_.m[3][1];
+	pos.z = worldTransform_.matWorld_.m[3][2];
+	return pos;
 }
 
 void Player::OnCollision() {
 	// 何もしない
+}
+
+// 親となるワールドトランスフォームをセット
+void Player::SetParent(const WorldTransform* parent) { 
+	worldTransform_.parent_ = parent; 
 }
 
 void Player::Draw(const ViewProjection viewProjection) {
