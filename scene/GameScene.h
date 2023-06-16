@@ -46,6 +46,13 @@ public: // メンバ関数
 	void Draw();
 
 	/// <summary>
+	/// 
+	/// </aummary>
+	/// 
+	/// 
+	void AddEnemy(Vector3 pos);
+
+	/// <summary>
 	/// 敵弾を追加する
 	/// </summary>
 	/// <param name="enemyBullet">敵弾</param>
@@ -81,7 +88,11 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 
 	// 敵キャラ
-	Enemy* enemy_ = nullptr;
+	//Enemy* enemy_ = nullptr;
+	std::list<Enemy*> enemys_;
+
+	// 敵弾のリスト
+	std::list<EnemyBullet*> bullets_;
 
 	// 天球
 	Skydome* skydome_ = nullptr;
@@ -100,8 +111,6 @@ private: // メンバ変数
 	// レールカメラ
 	RailCamera* railCamera_ = nullptr;
 
-	// 敵弾のリスト
-	std::list<EnemyBullet*> bullets_;
 
 
 

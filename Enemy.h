@@ -85,6 +85,11 @@ public:
 	/// </summary>
 	void OnCollision();
 
+	/// <summary>
+	/// デスフラグのゲッター
+	/// </summary>
+	bool GetIsDead() const { return isDead_; }
+
 	///// <summary>
 	///// 弾リストを取得
 	///// </summary>
@@ -129,6 +134,15 @@ private:
 
 	// 発射タイマー
 	int32_t fireInterval = 0;
+
+	// 寿命<frm>
+	static const int32_t kLifeTime = 60 * 5;
+
+	// デスタイマー
+	int32_t deathTimer_ = kLifeTime;
+
+	// デスフラグ
+	bool isDead_ = false;
 
 	// 自キャラ
 	Player* player_ = nullptr;

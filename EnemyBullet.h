@@ -33,7 +33,7 @@ public:
 	/// <summary>
 	/// デスフラグのゲッター
 	/// </summary>
-	bool IsDead() const { return isDead_; }
+	bool GetIsDead() const { return isDead_; }
 
 	/// <summary>
 	/// 衝突を感知したら呼び出されるコールバック関数

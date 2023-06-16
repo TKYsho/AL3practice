@@ -117,6 +117,12 @@ void Enemy::ApproachUpdate() {
 }
 
 void Enemy::LeaveUpdate() {
+
+	// 死亡処理
+	if (deathTimer_-- == 0) {
+		isDead_ = true;
+	}
+
 	// 座標を移動させる
 	worldTransform_.translation_.x += leaveVelocity_.x;
 	worldTransform_.translation_.y += leaveVelocity_.y;
