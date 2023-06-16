@@ -3,6 +3,7 @@
 #include <cassert>
 #include "ImguiManager.h"
 #include "AxisIndicator.h"
+#include "EnemyBullet.h"
 
 GameScene::GameScene() {}
 
@@ -15,6 +16,9 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 	delete debugCamera_;
 	delete railCamera_;
+	for (EnemyBullet* bullet : bullets_) {
+		delete bullet;
+	}
 }
 
 void GameScene::Initialize() {
@@ -58,6 +62,8 @@ void GameScene::Initialize() {
 	Vector3 velocity(0, 0, kEnemySpeed);
 	// 敵の初期化
 	enemy_->Initialize(model_, { 10.0f, 2.0f, 50.0f }, velocity);
+	// 敵キャラにゲームシーンを渡す
+	enemy_->SetGameScene(this);
 	// 敵に自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
 
@@ -94,6 +100,20 @@ void GameScene::Update() {
 	// 敵の更新(Enemyがnullでないときだけ)
 	if (enemy_){
 		enemy_->Update();
+	}
+
+	// デスフラグの立った敵弾を削除 (ラムダ式)
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+
+	// 敵弾更新
+	for (EnemyBullet* bullet : bullets_) {
+		bullet->Update();
 	}
 
 	// Debug時のみデバッグカメラ有効フラグを切り替える
@@ -178,6 +198,12 @@ void GameScene::Draw() {
 		enemy_->Draw(viewProjection_);
 	}
 	
+	// 敵弾の描画
+	for (EnemyBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection_);
+	}
+
+
 	// 天球の描画
 	skydome_->Draw(viewProjection_);
 
@@ -199,6 +225,11 @@ void GameScene::Draw() {
 #pragma endregion
 }
 
+void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+	// リストに敵弾を登録する
+	bullets_.push_back(enemyBullet);
+}
+
 void GameScene::CheckAllCollisions() {
 	// 判定対象AとBの座標
 	Vector3 posA, posB;
@@ -206,7 +237,9 @@ void GameScene::CheckAllCollisions() {
 	// 自弾リストの取得
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 	// 敵弾リストの取得
-	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+	//const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+	const std::list<EnemyBullet*>& enemyBullets = bullets_;
+
 
 	#pragma region 自キャラと敵弾の当たり判定
 

@@ -93,8 +93,11 @@
     <ClCompile Include="EnemyBullet.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
+    <ClCompile Include="RailCamera.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
     <ClCompile Include="Skydome.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

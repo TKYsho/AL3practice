@@ -46,6 +46,12 @@ public: // メンバ関数
 	void Draw();
 
 	/// <summary>
+	/// 敵弾を追加する
+	/// </summary>
+	/// <param name="enemyBullet">敵弾</param>
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
+
+	/// <summary>
 	/// 衝突判定と応答
 	/// </summary>
 	void CheckAllCollisions();
@@ -93,6 +99,10 @@ private: // メンバ変数
 
 	// レールカメラ
 	RailCamera* railCamera_ = nullptr;
+
+	// 敵弾のリスト
+	std::list<EnemyBullet*> bullets_;
+
 
 
 

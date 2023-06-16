@@ -5,6 +5,9 @@
 #include <ViewProjection.h>
 #include "EnemyBullet.h"
 
+// ゲームシーンの前方宣言
+class GameScene;
+
 // 自機クラスの前方宣言
 class Player;
 
@@ -82,16 +85,19 @@ public:
 	/// </summary>
 	void OnCollision();
 
-	/// <summary>
-	/// 弾リストを取得
-	/// </summary>
-	const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
+	///// <summary>
+	///// 弾リストを取得
+	///// </summary>
+	//const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
 
 	/// <summary>
 	/// 半径を取得
 	/// </summary>
 	const float GetRadius() { return radius_; }
 	const float radius_ = 1.0f;
+
+	// ゲームシーンのセッター
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 private:
 	// ワールド変換データ
@@ -119,12 +125,15 @@ private:
 	static void (Enemy::*spPhase[])();
 
 	// 弾のポインタ
-	std::list<EnemyBullet*> bullets_;
+	//std::list<EnemyBullet*> bullets_;
 
 	// 発射タイマー
 	int32_t fireInterval = 0;
 
 	// 自キャラ
 	Player* player_ = nullptr;
+
+	// ゲームシーン
+	GameScene* gameScene_ = nullptr;
 };
 
