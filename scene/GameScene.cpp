@@ -4,6 +4,7 @@
 #include "ImguiManager.h"
 #include "AxisIndicator.h"
 #include "EnemyBullet.h"
+#include <fstream>
 
 GameScene::GameScene() {}
 
@@ -58,7 +59,9 @@ void GameScene::Initialize() {
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_, playerPosition);
 
-	//// 敵の生成
+	// 敵の生成
+	LoadEnemyPopData();
+
 	//enemy_ = new Enemy();
 	//// 敵の速度
 	//const float kEnemySpeed = -1.0f;
@@ -71,7 +74,8 @@ void GameScene::Initialize() {
 	//enemy_->SetGameScene(this);
 	//// 敵に自キャラのアドレスを渡す
 	//enemy_->SetPlayer(player_);
-	AddEnemy({10.0f, 2.0f, 50.0f});
+	
+	//AddEnemy({10.0f, 2.0f, 50.0f});
 
 	// 天球3Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -102,6 +106,9 @@ void GameScene::Update() {
 
 	// 自キャラの更新
 	player_->Update();
+
+	// 敵発生コマンド(csv)の更新
+	UpdateEnemypopCommands();
 
 	// デスフラグの立った敵を削除（ラムダ式）
 	enemys_.remove_if([](Enemy* enemy) {
@@ -358,4 +365,81 @@ float GameScene::GetDistance(const Vector3& posA, const Vector3& posB) {
 		(posB.y - posA.y) * (posB.y - posA.y) +
 		(posB.z - posA.z) * (posB.z - posA.z);
 	return distance;
+}
+
+void GameScene::LoadEnemyPopData() {
+	// ファイルを開く
+	std::ifstream file;
+	file.open("Resources/enemyPop.csv");
+	assert(file.is_open());
+
+	// ファイルの内容を文字列ストリームにコピー
+	enemyPopCommands << file.rdbuf();
+
+	// ファイルを閉じる
+	file.close();
+}
+
+void GameScene::UpdateEnemypopCommands() {
+	// 待機処理
+	if (isWait_) {
+		waitTimer_--;
+		if (waitTimer_ <= 0) {
+			// 待機完了
+			isWait_ = false;
+		}
+		return;
+	}
+
+	// 1行分の文字列を入れる変数
+	std::string line;
+
+	// コマンド実行ループ
+	while (getline(enemyPopCommands, line)) {
+		// 1行分の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
+
+		std::string word;
+		// ,区切りで行の先端文字列を取得
+		getline(line_stream, word, ',');
+
+		// "//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			// コメント行を飛ばす
+			continue;
+		}
+
+		// POPコマンド
+		if (word.find("POP") == 0) {
+			// x座標
+			getline(line_stream, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			// y座標
+			getline(line_stream, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			// z座標
+			getline(line_stream, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+			// 敵を発生させる
+			AddEnemy(Vector3(x, y, z));
+		}
+
+		// WAITコマンド
+		else if (word.find("WAIT") == 0) {
+			getline(line_stream, word, ',');
+
+			// 待ち時間
+			int32_t waitTime = atoi(word.c_str());
+
+			// 待機開始
+			isWait_ = true;
+			waitTimer_ = waitTime;
+
+			// コマンドループを抜ける
+			break;	// 重要
+		}
+	}
 }

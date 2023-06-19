@@ -19,7 +19,7 @@ void RailCamera::Update() {
 	// 移動距離の定義
 	Vector3 move = {0.0f, 0.0f, -0.01f};
 	// 回転角の定義
-	Vector3 rot = {0.0f, 0.001f, 0.0f};
+	Vector3 rot = {0.0f, 0.0f, 0.0f};
 
 	// 移動距離の加算
 	worldTransform_.translation_.x += move.x;
