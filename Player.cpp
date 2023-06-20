@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <cassert>
 #include "ImGuiManager.h"
+#include "MathUtility.h"
 
 void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& position){
 
@@ -19,6 +20,9 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
+
+	// 3Dレティクルのワールドトランスフォーム初期化
+	worldTransform3DReticle_.Initialize();
 }
 
 Player::~Player() {
@@ -88,6 +92,21 @@ void Player::Update() {
 	worldTransform_.translation_.x += move.x;
 	worldTransform_.translation_.y += move.y;
 	worldTransform_.translation_.z += move.z;
+
+	// 自機のワールド座標から3Dレティクルのワールド座標を計算
+	{
+		// 自機から3Dレティクルへの距離
+		const float kDistancePlayerTo3DReticle = 50.0f;
+		// 自機から3Dレティクルへのオフセット(Z+向き)
+		Vector3 offset = { 0, 0, 1.0f };
+		// 自機のワールド行列の回転を反映
+		offset = TransferNormal(offset, worldTransform_.matWorld_);
+		// ベクトルの長さを整える
+		offset = Normalize(offset) * kDistancePlayerTo3DReticle;
+		// 3Dレティクルの座標を設定
+		worldTransform3DReticle_.translation_ = GetWorldPosition() + offset;
+		worldTransform3DReticle_.UpdateMatrix();
+	}
 
 	// キャラクター攻撃処理
 	Attack();
@@ -159,7 +178,7 @@ void Player::Attack() {
 		Vector3 velocity(0, 0, kBulletSpeed);
 
 		// 速度ベクトルを自機の向きに合わせて回転させる
-		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+		velocity = TransferNormal(velocity, worldTransform_.matWorld_);
 
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
@@ -192,6 +211,9 @@ void Player::Draw(const ViewProjection viewProjection) {
 
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+
+	// 3Dレティクルを仮で描画
+	model_->Draw(worldTransform3DReticle_, viewProjection);
 
 	// 弾描画
 	//if (bullets_) {

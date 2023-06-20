@@ -73,7 +73,7 @@ public:
 	void SetParent(const WorldTransform* parent);
 
 private:
-	// ワールド変換データ
+	// 自機のワールド変換データ
 	WorldTransform worldTransform_;
 	// モデル
 	Model* model_ = nullptr;
@@ -86,5 +86,8 @@ private:
 
 	// キーボード入力
 	Input* input_ = nullptr;
+
+	// 3Dレティクル用ワールドトランスフォーム
+	WorldTransform worldTransform3DReticle_;
 
 };
