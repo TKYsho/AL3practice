@@ -59,6 +59,9 @@ void GameScene::Initialize() {
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_, playerPosition);
 
+	// レティクルのテクスチャ
+	TextureManager::Load("target.png");
+
 	// 敵の生成
 	LoadEnemyPopData();
 
@@ -245,6 +248,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
+	player_->DrawUI();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

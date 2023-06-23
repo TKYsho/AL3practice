@@ -7,6 +7,7 @@
 #include "PlayerBullet.h"
 #include <list>
 #include "MathUtility.h"
+#include "Sprite.h"
 
 /// <summary>
 /// 自キャラ
@@ -72,6 +73,11 @@ public:
 	/// <param name="parent>親となるワールドトランスフォーム</param>
 	void SetParent(const WorldTransform* parent);
 
+	/// <summary>
+	/// UI描画
+	/// </summary>
+	void DrawUI();
+
 private:
 	// 自機のワールド変換データ
 	WorldTransform worldTransform_;
@@ -83,6 +89,9 @@ private:
 	// 弾
 	//PlayerBullet* bullets_ = nullptr;
 	std::list<PlayerBullet*> bullets_;
+
+	// 2Dレティクル用スプライト
+	Sprite* sprite2DReticle_ = nullptr;
 
 	// キーボード入力
 	Input* input_ = nullptr;

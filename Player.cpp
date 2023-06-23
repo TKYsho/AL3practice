@@ -15,6 +15,12 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
+	// レティクル用テクスチャ取得
+	uint32_t textureReticle = TextureManager::Load("target.png");
+
+	// スプライト生成
+	sprite2DReticle_ = Sprite::Create(textureReticle, {0, 0}, {1, 1, 1, 1}, {0.5f, 0.5f});
+
 	// 引数で受け取った値をセット
 	worldTransform_.translation_ = position;
 
@@ -32,6 +38,7 @@ Player::~Player() {
 	for (PlayerBullet* bullet : bullets_) {
 		delete bullet;
 	}
+	delete sprite2DReticle_;
 }
 
 void Player::Update() {
@@ -206,6 +213,8 @@ void Player::OnCollision() {
 void Player::SetParent(const WorldTransform* parent) { 
 	worldTransform_.parent_ = parent; 
 }
+
+void Player::DrawUI() {}
 
 void Player::Draw(const ViewProjection viewProjection) {
 
