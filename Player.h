@@ -9,6 +9,9 @@
 #include "MathUtility.h"
 #include "Sprite.h"
 
+//// ゲームシーンの前方宣言
+//class GameScene;
+
 /// <summary>
 /// 自キャラ
 /// </summary>
@@ -30,7 +33,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update(const ViewProjection viewProjection);
 
 	/// <summary>
 	/// 旋回
@@ -49,7 +52,7 @@ public:
 	void Attack();
 
 	/// <summary>
-	/// ワールド座標を取得
+	/// 自キャラのワールド座標を取得
 	/// </summary>
 	Vector3 GetWorldPosition();
 
@@ -74,6 +77,11 @@ public:
 	void SetParent(const WorldTransform* parent);
 
 	/// <summary>
+	/// 3Dレティクルのワールド座標取得
+	/// </summary>
+	Vector3 Get3DReticleWorldPosition();
+
+	/// <summary>
 	/// UI描画
 	/// </summary>
 	void DrawUI();
@@ -93,10 +101,15 @@ private:
 	// 2Dレティクル用スプライト
 	Sprite* sprite2DReticle_ = nullptr;
 
-	// キーボード入力
-	Input* input_ = nullptr;
-
 	// 3Dレティクル用ワールドトランスフォーム
 	WorldTransform worldTransform3DReticle_;
 
+	// ビュープロジェクション
+	//ViewProjection* viewProjection_;
+
+	// キーボード入力
+	Input* input_ = nullptr;
+
+	// ゲームシーン
+	//GameScene* gameScene_ = nullptr;
 };

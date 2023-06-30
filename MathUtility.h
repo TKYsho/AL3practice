@@ -8,6 +8,9 @@ Vector3 TransferNormal(const Vector3& v, const Matrix4x4& m);
 // ベクトルの正規化
 Vector3 Normalize(const Vector3& vector);
 
+// 座標変換
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+
 /// <summary>
 /// ベクトル同士の加算の代入演算子オーバーロード
 /// </summary>

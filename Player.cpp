@@ -2,6 +2,7 @@
 #include <cassert>
 #include "ImGuiManager.h"
 #include "MathUtility.h"
+//#include <GameScene.h>
 
 void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& position){
 
@@ -19,7 +20,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 	uint32_t textureReticle = TextureManager::Load("target.png");
 
 	// スプライト生成
-	sprite2DReticle_ = Sprite::Create(textureReticle, {0, 0}, {1, 1, 1, 1}, {0.5f, 0.5f});
+	sprite2DReticle_ = Sprite::Create(textureReticle, {0, 0}, {1, 1, 1,1}, {0.5, 0.5});
 
 	// 引数で受け取った値をセット
 	worldTransform_.translation_ = position;
@@ -29,6 +30,9 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 
 	// 3Dレティクルのワールドトランスフォーム初期化
 	worldTransform3DReticle_.Initialize();
+
+	// ビュープロジェクションをゲームシーンから取得
+	//viewProjection_ = gameScene_->GetViewProjection();
 }
 
 Player::~Player() {
@@ -38,10 +42,11 @@ Player::~Player() {
 	for (PlayerBullet* bullet : bullets_) {
 		delete bullet;
 	}
+	// Sprite::Createは内部でnew処理を行っているためdeleteが必要
 	delete sprite2DReticle_;
 }
 
-void Player::Update() {
+void Player::Update(const ViewProjection viewProjection) {
 
 	// デスフラグの立った弾を削除 (ラムダ式)
 	bullets_.remove_if([](PlayerBullet* bullet) {
@@ -100,6 +105,26 @@ void Player::Update() {
 	worldTransform_.translation_.y += move.y;
 	worldTransform_.translation_.z += move.z;
 
+	
+	// 3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
+	{
+		Vector3 positionReticle = Get3DReticleWorldPosition();
+
+		// ビューポート行列
+		Matrix4x4 matViewport =
+		    MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+
+		// ビュー行列とプロジェクション行列、ビューポート行列を合成する
+		Matrix4x4 matViewProjectionViewport =
+		    viewProjection.matView * viewProjection.matProjection * matViewport;
+
+		// ワールド→スクリーン座標変換（ここで3Dから2Dになる）
+		positionReticle = Transform(positionReticle, matViewProjectionViewport);
+
+		// スプライトのレティクルに座標設定
+		sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+	}
+
 	// 自機のワールド座標から3Dレティクルのワールド座標を計算
 	{
 		// 自機から3Dレティクルへの距離
@@ -135,6 +160,23 @@ void Player::Update() {
 
 	//// 行列を定数バッファに転送
 	//worldTransform_.TransferMatrix();
+
+	// //3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
+	//{ 
+	//	Vector3 positionReticle = worldTransform3DReticle_.translation_;
+	//	
+	//	// ビューポート行列
+	//	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+	//
+	//	// ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	//	Matrix4x4 matViewProjectionViewport = viewProjection.matView * viewprojection.matProjection * matViewport;
+
+	//	// ワールド→スクリーン座標変換（ここで3Dから2Dになる）
+	//	positionReticle = Transform(positionReticle, matViewProjectionViewport);
+
+	//	// スプライトのレティクルに座標設定
+	//	sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+	//}
 
 	
 #ifdef _DEBUG // デバッグ時のみデバッグウィンドウを表示（Update関数の中に実装する）
@@ -184,8 +226,12 @@ void Player::Attack() {
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 
-		// 速度ベクトルを自機の向きに合わせて回転させる
-		velocity = TransferNormal(velocity, worldTransform_.matWorld_);
+		// 自機から照準オブジェクトへのベクトル
+		velocity = Get3DReticleWorldPosition() - GetWorldPosition();
+		velocity = Normalize(velocity) * kBulletSpeed;
+
+		//// 速度ベクトルを自機の向きに合わせて回転させる
+		//velocity = TransferNormal(velocity, worldTransform_.matWorld_);
 
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
@@ -209,20 +255,30 @@ void Player::OnCollision() {
 	// 何もしない
 }
 
-// 親となるワールドトランスフォームをセット
 void Player::SetParent(const WorldTransform* parent) { 
+	// 親となるワールドトランスフォームをセット
 	worldTransform_.parent_ = parent; 
 }
 
-void Player::DrawUI() {}
+Vector3 Player::Get3DReticleWorldPosition() { 
+	Vector3 worldPos;
+	worldPos.x = worldTransform3DReticle_.matWorld_.m[3][0];
+	worldPos.y = worldTransform3DReticle_.matWorld_.m[3][1];
+	worldPos.z = worldTransform3DReticle_.matWorld_.m[3][2];
+	return worldPos; 
+}
+
+void Player::DrawUI() {
+	sprite2DReticle_->Draw(); 
+}
 
 void Player::Draw(const ViewProjection viewProjection) {
 
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
-	// 3Dレティクルを仮で描画
-	model_->Draw(worldTransform3DReticle_, viewProjection);
+	//// 3Dレティクルを仮で描画
+	//model_->Draw(worldTransform3DReticle_, viewProjection);
 
 	// 弾描画
 	//if (bullets_) {

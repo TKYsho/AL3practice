@@ -6,7 +6,7 @@
 
 /// <summary>
 /// 天球
-/// </summarry>
+/// </summary>
 class Skydome {
 public:
 	/// <summary>

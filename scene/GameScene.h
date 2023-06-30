@@ -79,6 +79,16 @@ public: // メンバ関数
 	/// </summary>
 	void UpdateEnemypopCommands();
 
+	/// <summary>
+	/// ビュープロジェクションの取得
+	/// </summary>
+	void GetViewProjection(ViewProjection viewProjection);
+
+	/// <summary>
+	/// ビュープロジェクションの取得
+	/// </summary>
+	ViewProjection* GetViewProjection() { return &viewProjection_; };
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;

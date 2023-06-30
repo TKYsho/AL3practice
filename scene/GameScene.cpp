@@ -50,6 +50,9 @@ void GameScene::Initialize() {
 	// レールカメラの初期化
 	railCamera_->Initialize({0.0f, 0.0f, -50.0f}, {0.0f, 0.0f, 0.0f});
 
+	// レティクルのテクスチャ
+	TextureManager::Load("target.png");
+
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラとレールカメラの親子関係を結ぶ
@@ -57,10 +60,8 @@ void GameScene::Initialize() {
 	// 自キャラの位置をレールカメラから離す
 	Vector3 playerPosition{0.0f, 0.0f, 50.0f};
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_, playerPosition);
 
-	// レティクルのテクスチャ
-	TextureManager::Load("target.png");
+	player_->Initialize(model_, textureHandle_, playerPosition);
 
 	// 敵の生成
 	LoadEnemyPopData();
@@ -108,7 +109,7 @@ void GameScene::Update() {
 	CheckAllCollisions();
 
 	// 自キャラの更新
-	player_->Update();
+	player_->Update(viewProjection_);
 
 	// 敵発生コマンド(csv)の更新
 	UpdateEnemypopCommands();
@@ -447,4 +448,8 @@ void GameScene::UpdateEnemypopCommands() {
 			break;	// 重要
 		}
 	}
+}
+
+void GameScene::GetViewProjection(ViewProjection viewProjection) { 
+	viewProjection = viewProjection_;
 }
