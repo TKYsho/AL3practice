@@ -22,7 +22,7 @@ Matrix4x4 MakeRotationYMatrix(float theta);
 Matrix4x4 MakeRotationZMatrix(float theta);
 
 // 平行移動行列
-Matrix4x4 MaakeTranslateMatrix(Vector3 trans);
+Matrix4x4 MakeTranslateMatrix(Vector3 trans);
 
 // 逆行列
 Matrix4x4 Inverse(const Matrix4x4& m);

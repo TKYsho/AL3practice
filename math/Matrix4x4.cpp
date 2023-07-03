@@ -71,7 +71,7 @@ Matrix4x4 MakeRotationZMatrix(float theta) {
 }
 
 // 平行移動行列
-Matrix4x4 MaakeTranslateMatrix(Vector3 trans) {
+Matrix4x4 MakeTranslateMatrix(Vector3 trans) {
 
 	Matrix4x4 result;
 
@@ -220,7 +220,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vecto
 	// 回転行列の合成(Z * X * Y)
 	Matrix4x4 matRot = matRotZ * matRotX * matRotY;
 	// 平行移動行列
-	Matrix4x4 matTrans = MaakeTranslateMatrix(translate);
+	Matrix4x4 matTrans = MakeTranslateMatrix(translate);
 
 	// 合成(matScale * matRot * matTrans)
 	Matrix4x4 result;

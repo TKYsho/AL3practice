@@ -140,6 +140,56 @@ void Player::Update(const ViewProjection viewProjection) {
 		worldTransform3DReticle_.UpdateMatrix();
 	}
 
+	// マウスカーソルのスクリーン座標からワールド座標を取得して3Dレティクル配置
+	{
+		POINT mousePosition;
+		// マウス座標（スクリーン座標）を取得する
+		GetCursorPos(&mousePosition);
+
+		// クライアントエリア座標に変換する(クライアント座標とはスクリーン座標のこと)
+		HWND hwnd = WinApp::GetInstance()->GetHwnd();
+		ScreenToClient(hwnd, &mousePosition);
+
+		// マウス座標を2Dレティクルのスプライトに代入
+		sprite2DReticle_->SetPosition( {(float)mousePosition.x, (float)mousePosition.y} );
+
+		// ビューポート行列
+		Matrix4x4 matViewport =
+		    MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+
+		// ビュープロジェクションビューポート合成行列
+		Matrix4x4 matVPV = viewProjection.matView * viewProjection.matProjection * matViewport;
+		// 合成行列の逆行列を計算する
+		Matrix4x4 matInverseVPV = Inverse(matVPV);
+
+		// スクリーン座標
+		Vector3 posNear = Vector3((float)mousePosition.x, (float)mousePosition.y, 0);	// 二アークリップ
+		Vector3 posFar = Vector3((float)mousePosition.x, (float)mousePosition.y, 1);	// ファークリップ
+	
+		// スクリーン座標からワールド座標系へ
+		posNear = Transform(posNear, matInverseVPV);
+		posFar = Transform(posFar, matInverseVPV);
+	
+		// マウスレイの方向
+		Vector3 mouseDirection = posNear - posFar;
+		mouseDirection = Normalize(mouseDirection);
+		// カメラから照準オブジェクトへの距離
+		const float kDistanceTestObject = -100.0f;
+		// posNearを基準に3Dレティクルの座標を求める
+		worldTransform3DReticle_.translation_ = posNear + (mouseDirection * kDistanceTestObject);
+		// ワールド行列の更新
+		worldTransform3DReticle_.UpdateMatrix();
+
+		// デバッグ文字
+		ImGui::Begin("Player");
+		ImGui::Text("2DReticle:(%f,%f)", sprite2DReticle_->GetPosition().x, sprite2DReticle_->GetPosition().y);
+		ImGui::Text("Near:(%+.2f,%+.2f,%+.2f)", posNear.x, posNear.y, posNear.z);
+		ImGui::Text("Far:(%+.2f,%+.2f,%+.2f)", posFar.x, posFar.y, posFar.z);
+		ImGui::Text("3DReticle:(%+.2f,%+.2f,%+.2f)", worldTransform3DReticle_.translation_.x,
+		    worldTransform3DReticle_.translation_.y, worldTransform3DReticle_.translation_.z);
+		ImGui::End();
+	}
+
 	// キャラクター攻撃処理
 	Attack();
 
