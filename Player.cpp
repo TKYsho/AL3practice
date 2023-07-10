@@ -171,7 +171,11 @@ void Player::Update(const ViewProjection viewProjection) {
 		posFar = Transform(posFar, matInverseVPV);
 	
 		// マウスレイの方向
-		Vector3 mouseDirection = posNear - posFar;
+		Vector3 mouseDirection;
+		mouseDirection.x = posNear.x - posFar.x;
+		mouseDirection.y = posNear.y - posFar.y;
+		mouseDirection.z = posNear.z - posFar.z;
+
 		mouseDirection = Normalize(mouseDirection);
 		// カメラから照準オブジェクトへの距離
 		const float kDistanceTestObject = -100.0f;
