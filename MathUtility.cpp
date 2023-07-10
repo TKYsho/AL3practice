@@ -53,19 +53,19 @@ Vector3 operator+(const Vector3& v1, const Vector3& v2) {
 }
 
 // ベクトル同士の減算の代入演算子オーバーロード
-Vector3 operator-=(Vector3 v1, Vector3 v2) {
+Vector3 operator-=(const Vector3& v1, const Vector3& v2) {
 	Vector3 result;
 	result.x = v1.x - v2.x;
 	result.y = v1.y - v2.y;
 	result.z = v1.z - v2.z;
-	v1 = result;
-	return v1;
+	return result;
 }
 
 // ベクトル同士の減算の二項演算子オーバーロード
 Vector3 operator-(const Vector3& v1, const Vector3& v2) {
 	Vector3 result = v1;
-	return result -= v2;
+	result -= v2;
+	return result;
 }
 
 // ベクトル同士の乗算の代入演算子オーバーロード
@@ -150,4 +150,21 @@ Vector3 operator/=(Vector3 v, float s) {
 Vector3 operator/(Vector3 v, float s) { 
 	Vector3 result = v;
 	return result /= s;
+}
+
+// 内積
+float Dot(const Vector3& v1, const Vector3& v2) { return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z; }
+
+// ベクトルの長さ
+float Length(const Vector3& v) { return std::sqrt(Dot(v, v)); }
+
+// 線形補完
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t) {
+	Vector3 temp;
+	temp = (v1 * (1.0f - t)) + (v2 * t);
+	return temp;
+}
+
+Vector3 Distance(const Vector3& v1, const Vector3& v2) { 
+	return Vector3{v1.x - v2.x, v1.y - v2.y, v1.z - v2.z}; 
 }

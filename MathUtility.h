@@ -24,7 +24,7 @@ Vector3 operator+(const Vector3& v1, const Vector3& v2);
 /// <summary>
 /// ベクトル同士の減算の代入演算子オーバーロード
 /// </summary>
-Vector3 operator-=(Vector3 v1, Vector3 v2);
+Vector3 operator-=(const Vector3& v1, const Vector3& v2);
 
 /// <summary>
 /// ベクトル同士の減算の二項演算子オーバーロード
@@ -90,3 +90,17 @@ Vector3 operator/=(Vector3 v, float s);
 /// ベクトルとfloat型変数の除算の二項演算子オーバーロード
 /// <summary>
 Vector3 operator/(Vector3 v, float s);
+
+// 内積
+float Dot(const Vector3& v1, const Vector3& v2);
+
+// ベクトルの長さ
+float Length(const Vector3& v);
+
+/// <summary>
+/// 線形補完
+/// </summary>
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
+
+// ベクトル間の距離
+Vector3 Distance(const Vector3& v1, const Vector3& v2);

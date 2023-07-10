@@ -3,6 +3,10 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include <ViewProjection.h>
+#include "MathUtility.h"
+
+// Playerクラス前方宣言
+class Player;
 
 /// <summary>
 /// 敵の弾
@@ -46,6 +50,9 @@ public:
 	const float GetRadius() { return radius_; }
 	const float radius_ = 1.0f;
 
+	// player取得関数
+	void SetPlayer(Player* player) { player_ = player; }
+
 private:
 	// ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -63,4 +70,6 @@ private:
 	// デスフラグ
 	bool isDead_ = false;
 
+	// player
+	Player* player_ = nullptr;
 };
