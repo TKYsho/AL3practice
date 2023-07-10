@@ -139,9 +139,9 @@ void Enemy::Fire() {
 	Vector3 playerPos = player_->GetWorldPosition();
 	// 距離を求める
 	Vector3 distance{
-		worldTransform_.translation_.x - playerPos.x,
-		worldTransform_.translation_.y - playerPos.y,
-		worldTransform_.translation_.z - playerPos.z
+	    worldTransform_.matWorld_.m[3][0] - playerPos.x,
+	    worldTransform_.matWorld_.m[3][1] - playerPos.y,
+	    worldTransform_.matWorld_.m[3][2] - playerPos.z
 	};
 	// distanceを正規化する
 	Normalize(distance);

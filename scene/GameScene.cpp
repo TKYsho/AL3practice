@@ -142,6 +142,7 @@ void GameScene::Update() {
 
 	// 敵弾更新
 	for (EnemyBullet* bullet : bullets_) {
+		bullet->SetPlayer(player_);
 		bullet->Update();
 	}
 

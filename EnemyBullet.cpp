@@ -20,17 +20,23 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	worldTransform_.scale_.z = 3.0f;
 	// 引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
+	// playerに値を割り当てる
+	//SetPlayer(player_);
 }
 
 void EnemyBullet::Update() {
 
-	//// 敵弾から自キャラへのベクトルを計算
-	//Vector3 toPlayer = worldTransform_.translation_ - player_->GetWorldPosition();
-	//// ベクトルを正規化する
-	//Normalize(toPlayer);
-	//Normalize(velocity_);
-	//// 球面線形補完により、今の速度と自キャラへのベクトルを内挿し、新たな速度とする
-	//velocity_ = Lerp(velocity_, toPlayer, 0.5f) * -0.02f;
+	// 敵弾から自キャラへのベクトルを計算
+	Vector3 playerPos = player_->GetWorldPosition();
+	Vector3 toPlayer;
+	toPlayer.x = worldTransform_.translation_.x - playerPos.x;
+	toPlayer.y = worldTransform_.translation_.y - playerPos.y;
+	toPlayer.z = worldTransform_.translation_.z - playerPos.z;
+	// ベクトルを正規化する
+	Normalize(toPlayer);
+	Normalize(velocity_);
+	// 球面線形補完により、今の速度と自キャラへのベクトルを内挿し、新たな速度とする
+	velocity_ = Lerp(velocity_, toPlayer, 0.05f) * -0.8f;
 	
 	// Y軸周り角度（θy）
 	worldTransform_.rotation_.y = std::atan2(velocity_.x, velocity_.z);
