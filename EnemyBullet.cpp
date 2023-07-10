@@ -13,6 +13,10 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	worldTransform_.Initialize();
 	// 引数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
+	// 弾の形を設定（z方向に伸びた形状）
+	worldTransform_.scale_.x = 0.5f;
+	worldTransform_.scale_.y = 0.5f;
+	worldTransform_.scale_.z = 3.0f;
 	// v引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
 }
