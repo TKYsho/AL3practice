@@ -36,7 +36,7 @@ void EnemyBullet::Update() {
 	Normalize(toPlayer);
 	Normalize(velocity_);
 	// 球面線形補完により、今の速度と自キャラへのベクトルを内挿し、新たな速度とする
-	velocity_ = Lerp(velocity_, toPlayer, 0.05f) * -0.8f;
+	velocity_ = Lerp(velocity_, toPlayer, 0.02f) * -0.5f;
 	
 	// Y軸周り角度（θy）
 	worldTransform_.rotation_.y = std::atan2(velocity_.x, velocity_.z);
