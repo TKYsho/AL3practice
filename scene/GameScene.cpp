@@ -266,12 +266,14 @@ void GameScene::AddEnemy(Vector3 pos) {
 	Vector3 velocity(0, 0, kEnemySpeed);
 	// 敵の初期化
 	newEnemy->Initialize(model_, pos, velocity);
-	// 敵を登録する
-	enemys_.push_back(newEnemy);
+	
 	// 敵キャラにゲームシーンを渡す
 	newEnemy->SetGameScene(this);
 	// 敵に自キャラのアドレスを渡す
 	newEnemy->SetPlayer(player_);
+
+	// 敵を登録する
+	enemys_.push_back(newEnemy);
 }
 
 void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {

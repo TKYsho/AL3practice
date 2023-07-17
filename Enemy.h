@@ -4,6 +4,7 @@
 #include "WorldTransform.h"
 #include <ViewProjection.h>
 #include "EnemyBullet.h"
+#include "TimedCall.h"
 
 // ゲームシーンの前方宣言
 class GameScene;
@@ -104,6 +105,11 @@ public:
 	// ゲームシーンのセッター
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	/// <summary>
+	/// 弾を発射し、タイマーをリセットするコールバック関数
+	/// </summary>
+	void ShotReset();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -149,5 +155,8 @@ private:
 
 	// ゲームシーン
 	GameScene* gameScene_ = nullptr;
+
+	// 時限発動のリスト
+	std::list<TimedCall*> timedCalls_;
 };
 

@@ -207,7 +207,6 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 	return result;
 }
 
-
 // アフィン変換行列
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate) {
 
@@ -228,8 +227,9 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vecto
 
 	return result;
 }
-Matrix4x4 MakeViewportMatrix(
-    float left, float top, float width, float height, float minDepth, float maxDepth) {
+
+// ビューポート行列
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
 	
 	Matrix4x4 result;
 

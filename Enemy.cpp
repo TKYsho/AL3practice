@@ -33,6 +33,9 @@ Enemy::~Enemy() {
 	//for (EnemyBullet* bullet : bullets_) {
 	//	delete bullet;
 	//}
+	for (TimedCall* timedCall : timedCalls_) {
+		delete timedCall;
+	}
 }
 
 // フェーズの関数テーブル
@@ -110,6 +113,20 @@ void Enemy::ApproachUpdate() {
 		fireInterval = kFireInterval;
 	}
 
+	// 終了した弾発射タイマーを削除
+	timedCalls_.remove_if([](TimedCall* timedCall) {
+		if (timedCall->IsFinished()) {
+			delete timedCall;
+			return true;
+		}
+		return false;
+	});
+
+	// 範囲forでリストの全要素について回す(弾発射)
+	for (TimedCall* timedCall : timedCalls_) {
+		timedCall->Update();
+	}
+
 	// 既定の位置に到達したら離脱フェーズへ
 	if (worldTransform_.translation_.z < 0.0f) {
 		phase_ = Phase::Leave;
@@ -117,6 +134,9 @@ void Enemy::ApproachUpdate() {
 }
 
 void Enemy::LeaveUpdate() {
+
+	// 時限発動リストをクリアする
+	timedCalls_.clear();
 
 	// 死亡処理
 	if (deathTimer_-- == 0) {
@@ -171,8 +191,18 @@ Vector3 Enemy::Normalize(const Vector3& vector) {
 void Enemy::ApproachInitialize() {
 	// 発射タイマーを初期化
 	fireInterval = kFireInterval;
+
+	//ShotReset();
 }
 
 void Enemy::OnCollision() {
 	// 何もしない
+}
+
+void Enemy::ShotReset() {
+	// 弾を発射する
+	Fire();
+
+	// 発射タイマーをリセットする
+	timedCalls_.push_back(new TimedCall(std::bind(&Enemy::ShotReset, this), fireInterval));
 }
