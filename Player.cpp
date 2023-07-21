@@ -178,7 +178,7 @@ void Player::Update(const ViewProjection viewProjection) {
 
 		mouseDirection = Normalize(mouseDirection);
 		// カメラから照準オブジェクトへの距離
-		const float kDistanceTestObject = -100.0f;
+		const float kDistanceTestObject = -80.0f;
 		// posNearを基準に3Dレティクルの座標を求める
 		worldTransform3DReticle_.translation_ = posNear + (mouseDirection * kDistanceTestObject);
 		// ワールド行列の更新
