@@ -17,7 +17,7 @@ void RailCamera::Initialize(const Vector3& position, const Vector3& radian) {
 void RailCamera::Update() {
 
 	// 移動距離の定義
-	Vector3 move = {0.0f, 0.0f, -0.01f};
+	Vector3 move = {0.0f, 0.0f, 0.0f};
 	// 回転角の定義
 	Vector3 rot = {0.0f, 0.0f, 0.0f};
 

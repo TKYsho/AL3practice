@@ -14,6 +14,7 @@
 #include "Skydome.h"
 #include "RailCamera.h"
 #include <sstream>
+#include "Collider.h"
 
 /// <summary>
 /// ゲームシーン
@@ -88,6 +89,14 @@ public: // メンバ関数
 	/// ビュープロジェクションの取得
 	/// </summary>
 	ViewProjection* GetViewProjection() { return &viewProjection_; };
+
+private: // メンバ関数
+	/// <summary>
+	/// コライダー2つの衝突判定と応答
+	/// </summary>
+	/// <param name="colliderA">コライダーA</param>
+	/// <param name="colliderB">コライダーB</param>
+	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;

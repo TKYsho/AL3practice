@@ -5,6 +5,7 @@
 #include <ViewProjection.h>
 #include "EnemyBullet.h"
 #include "TimedCall.h"
+#include "Collider.h"
 
 // ゲームシーンの前方宣言
 class GameScene;
@@ -15,7 +16,7 @@ class Player;
 /// <summary>
 /// 敵
 /// </summary>
-class Enemy {
+class Enemy : public Collider {
 
 	enum class Phase {
 		Approach, // 接近する
@@ -79,12 +80,18 @@ public:
 	/// <summary>
 	/// ワールド座標を取得
 	/// </summary>
-	Vector3 GetWorldPosition() { return worldTransform_.translation_; }
+	Vector3 GetWorldPosition() override { 
+		return {
+		    worldTransform_.matWorld_.m[3][0], 
+			worldTransform_.matWorld_.m[3][1],
+		    worldTransform_.matWorld_.m[3][2]
+		};
+	}
 
 	/// <summary>
 	/// 衝突を感知したら呼び出されるコールバック関数
 	/// </summary>
-	void OnCollision();
+	void OnCollision() override;
 
 	/// <summary>
 	/// デスフラグのゲッター

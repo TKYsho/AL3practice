@@ -8,6 +8,7 @@
 #include <list>
 #include "MathUtility.h"
 #include "Sprite.h"
+#include "Collider.h"
 
 //// ゲームシーンの前方宣言
 //class GameScene;
@@ -15,7 +16,7 @@
 /// <summary>
 /// 自キャラ
 /// </summary>
-class Player
+class Player : public Collider
 {
 public:
 	/// <summary>
@@ -54,12 +55,18 @@ public:
 	/// <summary>
 	/// 自キャラのワールド座標を取得
 	/// </summary>
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition() override{
+		return {
+		    worldTransform_.matWorld_.m[3][0], 
+			worldTransform_.matWorld_.m[3][1],
+		    worldTransform_.matWorld_.m[3][2]
+		};
+	}
 
 	/// <summary>
 	/// 衝突を感知したら呼び出されるコールバック関数 
 	/// </summary>
-	void OnCollision();
+	void OnCollision() override;
 
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets() { return bullets_; }

@@ -3,11 +3,12 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include <ViewProjection.h>
+#include "Collider.h"
 
 /// <summary>
 /// 自キャラの弾
 /// </summary>
-class PlayerBullet {
+class PlayerBullet : public Collider {
 public:
 	/// <summary>
 	/// 初期化
@@ -31,7 +32,13 @@ public:
 	/// <summary>
 	/// ワールド座標を取得
 	/// </summary>
-	Vector3 GetWorldPosition() { return worldTransform_.translation_; }
+	Vector3 GetWorldPosition() override {
+		return {
+		    worldTransform_.matWorld_.m[3][0], 
+			worldTransform_.matWorld_.m[3][1],
+		    worldTransform_.matWorld_.m[3][2]
+		};
+	}
 
 	/// <summary>
 	/// デスフラグのgetter 
@@ -41,7 +48,7 @@ public:
 	/// <summary>
 	/// 衝突を感知したら呼び出されるコールバック関数
 	/// </summary>
-	void OnCollision();
+	void OnCollision() override;
 
 	/// <summary>
 	/// 半径を取得
