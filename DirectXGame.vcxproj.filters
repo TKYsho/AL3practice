@@ -209,10 +209,16 @@
     <ClInclude Include="Skydome.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="TimedCall.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Collider.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TimedCall.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionConfig.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>

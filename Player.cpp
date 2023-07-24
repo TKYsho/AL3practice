@@ -33,6 +33,11 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 
 	// ビュープロジェクションをゲームシーンから取得
 	//viewProjection_ = gameScene_->GetViewProjection();
+
+	// 衝突属性を設定
+	SetCollisionAttribute(0x00000001);
+	// 衝突対象を自分の属性以外に設定
+	SetCollisionMask(0x11111110);
 }
 
 Player::~Player() {

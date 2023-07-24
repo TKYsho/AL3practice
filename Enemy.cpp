@@ -27,6 +27,11 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 
 	// 発射カウントを初期化
 	ApproachInitialize();
+
+	// 衝突属性を設定
+	SetCollisionAttribute(0x00000010);
+	// 衝突対象を自分の属性以外に設定
+	SetCollisionMask(0x11111101);
 }
 
 Enemy::~Enemy() {

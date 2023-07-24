@@ -9,6 +9,7 @@
 #include "MathUtility.h"
 #include "Sprite.h"
 #include "Collider.h"
+#include "CollisionConfig.h"
 
 //// ゲームシーンの前方宣言
 //class GameScene;

@@ -15,6 +15,7 @@
 #include "RailCamera.h"
 #include <sstream>
 #include "Collider.h"
+#include "CollisionManager.h"
 
 /// <summary>
 /// ゲームシーン
@@ -48,10 +49,9 @@ public: // メンバ関数
 	void Draw();
 
 	/// <summary>
-	/// 
-	/// </aummary>
-	/// 
-	/// 
+	/// 敵を追加
+	/// </summary>
+	/// <param name="pos">座標</param>
 	void AddEnemy(Vector3 pos);
 
 	/// <summary>
@@ -68,7 +68,7 @@ public: // メンバ関数
 	/// <summary>
 	/// AとBの距離を取得
 	/// </summary>
-	float GetDistance(const Vector3& posA, const Vector3& posB);
+	/// float GetDistance(const Vector3& posA, const Vector3& posB);
 
 	/// <summary>
 	/// 敵発生データの読み込み(csvから)
@@ -96,7 +96,7 @@ private: // メンバ関数
 	/// </summary>
 	/// <param name="colliderA">コライダーA</param>
 	/// <param name="colliderB">コライダーB</param>
-	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
+	/// void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -149,6 +149,9 @@ private: // メンバ変数
 
 	// 敵待機タイマー
 	int waitTimer_;
+
+	// 衝突マネージャ
+	CollisionManager* collisionManager_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用
