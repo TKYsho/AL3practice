@@ -2,6 +2,7 @@
 #include <iostream>
 #include <list>
 #include "Collider.h"
+#include "ImGuiManager.h"
 
 class CollisionManager {
 public:
@@ -9,12 +10,12 @@ public:
 	/// コライダーを受け取る
 	/// </summary>
 	/// <param name="collider">コライダー</param>
-	void GetCollider(Collider* collider) { collider_.push_back(collider); }
+	void GetCollider(Collider* collider) { colliders_.push_back(collider); }
 	
 	/// <summary>
 	/// コライダーをクリアする
 	/// </summary>
-	void ClearCollider() { collider_.clear(); }
+	void ClearCollider() { colliders_.clear(); }
 
 	/// <summary>
 	/// AとBの距離を取得
@@ -57,14 +58,14 @@ public:
 	/// </summary>
 	void CheckAllCollisions(){
 		// リスト内のペアを総当たり
-		std::list<Collider*>::iterator itrA = collider_.begin();
-		for (; itrA != collider_.end(); ++itrA) {
+		std::list<Collider*>::iterator itrA = colliders_.begin();
+		for (; itrA != colliders_.end(); ++itrA) {
 			// イテレータAからコライダーAを取得する
 			Collider* A = *itrA;
 			// イテレータBはイテレータAの次の要素から回す（重複判定を回避）
 			std::list<Collider*>::iterator itrB = itrA;
 			itrB++;
-			for (; itrB != collider_.end(); ++itrB) {
+			for (; itrB != colliders_.end(); ++itrB) {
 				// イテレータBからコライダーBを取得する
 				Collider* B = *itrB;
 				// コライダーAとコライダーBの当たり判定
@@ -75,5 +76,5 @@ public:
 
 private:
 	// コライダーリスト
-	std::list<Collider*> collider_;
+	std::list<Collider*> colliders_;
 };

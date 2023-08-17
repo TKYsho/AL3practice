@@ -311,7 +311,7 @@ void GameScene::CheckAllCollisions() {
 		collisionManager_->GetCollider(enemyBullet);
 	}
 
-	// ペアを総当たり
+	// 当たり判定処理
 	collisionManager_->CheckAllCollisions();
 }
 
