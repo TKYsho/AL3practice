@@ -116,6 +116,8 @@ private: // メンバ変数
 
 	// 自キャラ
 	Player* player_ = nullptr;
+	// 自キャラモデル
+	Model* modelPlayer_ = nullptr;
 
 	// 敵キャラ
 	//Enemy* enemy_ = nullptr;

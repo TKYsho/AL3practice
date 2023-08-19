@@ -12,6 +12,7 @@ GameScene::~GameScene() {
 
 	delete model_;
 	delete player_;
+	delete modelPlayer_;
 	//delete enemy_;
 	for (Enemy* enemy : enemys_) {
 		delete enemy;
@@ -33,7 +34,7 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("player1.png");
+	textureHandle_ = TextureManager::Load("car/car.png");
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
@@ -49,7 +50,7 @@ void GameScene::Initialize() {
 	// レールカメラの生成
 	railCamera_ = new RailCamera();
 	// レールカメラの初期化
-	railCamera_->Initialize({0.0f, 0.0f, -50.0f}, {0.0f, 0.0f, 0.0f});
+	railCamera_->Initialize({0.0f, 5.0f, -10.0f}, {0.0f, 0.0f, 0.0f});
 
 	// レティクルのテクスチャ
 	TextureManager::Load("target.png");
@@ -60,9 +61,10 @@ void GameScene::Initialize() {
 	player_->SetParent(&railCamera_->GetWorldTransform());
 	// 自キャラの位置をレールカメラから離す
 	Vector3 playerPosition{0.0f, 0.0f, 50.0f};
+	// 自キャラ3Dモデルの生成
+	modelPlayer_ = Model::CreateFromOBJ("car", true);
 	// 自キャラの初期化
-
-	player_->Initialize(model_, textureHandle_, playerPosition);
+	player_->Initialize(modelPlayer_, textureHandle_, playerPosition);
 
 	// 敵の生成
 	LoadEnemyPopData();
