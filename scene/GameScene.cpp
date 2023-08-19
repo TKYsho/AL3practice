@@ -50,7 +50,7 @@ void GameScene::Initialize() {
 	// レールカメラの生成
 	railCamera_ = new RailCamera();
 	// レールカメラの初期化
-	railCamera_->Initialize({0.0f, 5.0f, -10.0f}, {0.0f, 0.0f, 0.0f});
+	railCamera_->Initialize({0.0f, 0.0f, -50.0f}, {0.0f, 0.0f, 0.0f});
 
 	// レティクルのテクスチャ
 	TextureManager::Load("target.png");
@@ -60,7 +60,7 @@ void GameScene::Initialize() {
 	// 自キャラとレールカメラの親子関係を結ぶ
 	player_->SetParent(&railCamera_->GetWorldTransform());
 	// 自キャラの位置をレールカメラから離す
-	Vector3 playerPosition{0.0f, 0.0f, 50.0f};
+	Vector3 playerPosition{0.0f, -4.5f, 25.0f};
 	// 自キャラ3Dモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("car", true);
 	// 自キャラの初期化
