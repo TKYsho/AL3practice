@@ -122,6 +122,12 @@ private: // メンバ変数
 	// 敵キャラ
 	//Enemy* enemy_ = nullptr;
 	std::list<Enemy*> enemys_;
+	// 敵キャラモデル
+	Model* modelEnemy_ = nullptr;
+
+	// 道路
+	Model* modelRoad_ = nullptr;
+	WorldTransform worldTransformRoad_;
 
 	// 敵弾のリスト
 	std::list<EnemyBullet*> bullets_;

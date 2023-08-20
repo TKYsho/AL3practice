@@ -11,7 +11,7 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 	model_ = model;
 
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("enemy1.png");
+	textureHandle_ = TextureManager::Load("car2/car2.png");
 
 	// ワールドトランスフォームの更新
 	worldTransform_.Initialize();

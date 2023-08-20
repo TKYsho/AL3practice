@@ -17,6 +17,8 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemys_) {
 		delete enemy;
 	}
+	delete modelEnemy_;
+	delete modelRoad_;
 	delete skydome_;
 	delete modelSkydome_;
 	delete debugCamera_;
@@ -50,7 +52,7 @@ void GameScene::Initialize() {
 	// レールカメラの生成
 	railCamera_ = new RailCamera();
 	// レールカメラの初期化
-	railCamera_->Initialize({0.0f, 0.0f, -50.0f}, {0.0f, 0.0f, 0.0f});
+	railCamera_->Initialize({0.0f, 0.0f, -75.0f}, {0.0f, 0.0f, 0.0f});
 
 	// レティクルのテクスチャ
 	TextureManager::Load("target.png");
@@ -68,6 +70,12 @@ void GameScene::Initialize() {
 
 	// 敵の生成
 	LoadEnemyPopData();
+
+	// 道路の座標を取得
+	worldTransformRoad_.Initialize();
+	worldTransformRoad_.translation_ = {0.0f, 0.0f, -10.0f};
+	// 道路の3Dモデルの生成
+	modelRoad_ = Model::CreateFromOBJ("road", true);
 
 	//enemy_ = new Enemy();
 	//// 敵の速度
@@ -211,7 +219,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-	//skydome_->Draw(viewProjection_);
+	// skydome_->Draw(viewProjection_);
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -226,23 +234,26 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	// model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 	// 自キャラの描画
 	player_->Draw(viewProjection_);
 
 	// 敵の描画(Enemyがnullでないときだけ)
-	//if (enemy_) {
+	// if (enemy_) {
 	//	enemy_->Draw(viewProjection_);
 	//}
 	for (Enemy* enemy : enemys_) {
 		enemy->Draw(viewProjection_);
 	}
-	
+
 	// 敵弾の描画
 	for (EnemyBullet* bullet : bullets_) {
 		bullet->Draw(viewProjection_);
 	}
+
+	// 道路の描画
+	modelRoad_->Draw(worldTransformRoad_, viewProjection_, TextureManager::Load("road/road.png")); 
 
 	// 天球の描画
 	skydome_->Draw(viewProjection_);
@@ -273,8 +284,10 @@ void GameScene::AddEnemy(Vector3 pos) {
 	// 敵の速度
 	const float kEnemySpeed = -1.0f;
 	Vector3 velocity(0, 0, kEnemySpeed);
+	// 敵の3Dモデル生成
+	modelEnemy_ = Model::CreateFromOBJ("car2", true);
 	// 敵の初期化
-	newEnemy->Initialize(model_, pos, velocity);
+	newEnemy->Initialize(modelEnemy_, pos, velocity);
 	
 	// 敵キャラにゲームシーンを渡す
 	newEnemy->SetGameScene(this);
