@@ -17,6 +17,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	AxisIndicator* axisIndicator = nullptr;
 	PrimitiveDrawer* primitiveDrawer = nullptr;
 	GameScene* gameScene = nullptr;
+	enum scene {
+		TITLE,
+		TUTORIAL,
+		GAME,
+		END
+	} SCENE = TITLE;
+	bool isClear = false;
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
@@ -26,7 +33,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	dxCommon = DirectXCommon::GetInstance();
 	dxCommon->Initialize(win);
 
-#pragma region 汎用機能初期化
+	#pragma region 汎用機能初期化
+
 	// ImGuiの初期化
 	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
 	imguiManager->Initialize(win, dxCommon);
@@ -55,49 +63,201 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	primitiveDrawer = PrimitiveDrawer::GetInstance();
 	primitiveDrawer->Initialize();
+
 #pragma endregion
 
-	// ゲームシーンの初期化
 	gameScene = new GameScene();
-	gameScene->Initialize();
 
-	// メインループ
-	while (true) {
-		// メッセージ処理
-		if (win->ProcessMessage()) {
-			break;
+	//while (true) {
+		switch (SCENE) {
+		case TITLE:
+		#pragma region タイトル処理
+
+			// ゲームシーンの初期化
+			gameScene->Initialize();
+
+			while (1) {
+				// メッセージ処理
+				if (win->ProcessMessage()) {
+					break;
+				}
+
+				// ImGui受付開始
+				imguiManager->Begin();
+				// 入力関連の毎フレーム処理
+				input->Update();
+
+				ImGui::Begin("scene");
+				ImGui::Text("Title");
+				ImGui::End();
+
+				// 軸表示の更新
+				axisIndicator->Update();
+				// ImGui受付終了
+				imguiManager->End();
+
+				// 描画開始
+				dxCommon->PreDraw();
+				// タイトルの描画
+				// gameScene->Draw();
+				// 軸表示の描画
+				axisIndicator->Draw();
+				// プリミティブ描画のリセット
+				primitiveDrawer->Reset();
+				// ImGui描画
+				imguiManager->Draw();
+				// 描画終了
+				dxCommon->PostDraw();
+
+				// タイトルの毎フレーム処理
+				if (input->TriggerKey(DIK_SPACE)) {
+					SCENE = TUTORIAL;
+					break;
+				}
+			}
+			#pragma endregion
+
+		case TUTORIAL:
+		#pragma region チュートリアル処理
+			while (1) {
+				// メッセージ処理
+				if (win->ProcessMessage()) {
+					break;
+				}
+
+				// ImGui受付開始
+				imguiManager->Begin();
+				// 入力関連の毎フレーム処理
+				input->Update();
+
+				ImGui::Begin("scene");
+				ImGui::Text("Tutorial");
+				ImGui::End();
+
+				// 軸表示の更新
+				axisIndicator->Update();
+				// ImGui受付終了
+				imguiManager->End();
+
+				// 描画開始
+				dxCommon->PreDraw();
+				// チュートリアルの描画
+				// gameScene->Draw();
+				// 軸表示の描画
+				axisIndicator->Draw();
+				// プリミティブ描画のリセット
+				primitiveDrawer->Reset();
+				// ImGui描画
+				imguiManager->Draw();
+				// 描画終了
+				dxCommon->PostDraw();
+
+				// チュートリアルの毎フレーム処理
+				if (input->TriggerKey(DIK_SPACE)) {
+					SCENE = GAME;
+					break;
+				}
+			}
+		#pragma endregion
+
+		case GAME:
+		#pragma region ゲーム処理
+			// メインループ
+			while (true) {
+				// メッセージ処理
+				if (win->ProcessMessage()) {
+					break;
+				}
+
+				// ImGui受付開始
+				imguiManager->Begin();
+				// 入力関連の毎フレーム処理
+				input->Update();
+				// ゲームシーンの毎フレーム処理
+				gameScene->Update();
+				// 軸表示の更新
+				axisIndicator->Update();
+				// ImGui受付終了
+				imguiManager->End();
+
+				// 描画開始
+				dxCommon->PreDraw();
+				// ゲームシーンの描画
+				gameScene->Draw();
+				// 軸表示の描画
+				axisIndicator->Draw();
+				// プリミティブ描画のリセット
+				primitiveDrawer->Reset();
+				// ImGui描画
+				imguiManager->Draw();
+				// 描画終了
+				dxCommon->PostDraw();
+
+				if (input->TriggerKey(DIK_SPACE)) {
+					SCENE = END;
+					break;
+				}
+			}
+		#pragma endregion
+
+		case END:
+		#pragma region 終了処理
+
+			while (1) {
+				// メッセージ処理
+				if (win->ProcessMessage()) {
+					break;
+				}
+
+				// ImGui受付開始
+				imguiManager->Begin();
+				// 入力関連の毎フレーム処理
+				input->Update();
+
+				ImGui::Begin("scene");
+				ImGui::Text("End");
+				ImGui::End();
+
+				// 軸表示の更新
+				axisIndicator->Update();
+				// ImGui受付終了
+				imguiManager->End();
+
+				// 描画開始
+				dxCommon->PreDraw();
+				// 終了結果画面の描画
+				if (isClear == true) {
+					// クリアの描画
+				} 
+				else {
+					// ゲームオーバーの描画
+				}
+				// 軸表示の描画
+				axisIndicator->Draw();
+				// プリミティブ描画のリセット
+				primitiveDrawer->Reset();
+				// ImGui描画
+				imguiManager->Draw();
+				// 描画終了
+				dxCommon->PostDraw();
+
+				// クリアの毎フレーム処理
+				if (input->TriggerKey(DIK_SPACE)) {
+					SCENE = TITLE;
+					break;
+				}
+			}
+
+		#pragma endregion
 		}
-
-		// ImGui受付開始
-		imguiManager->Begin();
-		// 入力関連の毎フレーム処理
-		input->Update();
-		// ゲームシーンの毎フレーム処理
-		gameScene->Update();
-		// 軸表示の更新
-		axisIndicator->Update();
-		// ImGui受付終了
-		imguiManager->End();
-
-		// 描画開始
-		dxCommon->PreDraw();
-		// ゲームシーンの描画
-		gameScene->Draw();
-		// 軸表示の描画
-		axisIndicator->Draw();
-		// プリミティブ描画のリセット
-		primitiveDrawer->Reset();
-		// ImGui描画
-		imguiManager->Draw();
-		// 描画終了
-		dxCommon->PostDraw();
-	}
-
+	//}
 	// 各種解放
 	SafeDelete(gameScene);
+	// audio解放
 	audio->Finalize();
 	// ImGui解放
 	imguiManager->Finalize();
+
 
 	// ゲームウィンドウの破棄
 	win->TerminateGameWindow();

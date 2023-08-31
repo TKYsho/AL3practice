@@ -131,10 +131,10 @@ private:
 	Vector3 velocity_;
 
 	// 接近時の速度
-	Vector3 approachVelocity_{0.0f, 0.0f, -1.0f};
+	Vector3 approachVelocity_{0.0f, 0.0f, -1.5f};
 
 	// 離脱時の速度
-	Vector3 leaveVelocity_{0.0f, 0.0f, -1.0f};
+	Vector3 leaveVelocity_{0.0f, 0.0f, -1.5f};
 
 	//// メンバ関数ポインタ
 	//void (Enemy::*pApproachUpdate)();

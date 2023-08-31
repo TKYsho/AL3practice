@@ -93,7 +93,7 @@ void Player::Update(const ViewProjection viewProjection) {
 
 	// キーボード入力による移動制限
 	// 移動限界座標
-	const float kMoveLimitX = 34.0f;
+	const float kMoveLimitX = 8.0f;
 	const float kMoveLimitY = 18.0f;
 
 	// 範囲を超えない処理
@@ -107,8 +107,8 @@ void Player::Update(const ViewProjection viewProjection) {
 
 	// 座標移動（ベクトルの加算）
 	worldTransform_.translation_.x += move.x;
-	worldTransform_.translation_.y += move.y;
-	worldTransform_.translation_.z += move.z;
+	//worldTransform_.translation_.y += move.y;
+	//worldTransform_.translation_.z += move.z;
 
 	
 	// 3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
