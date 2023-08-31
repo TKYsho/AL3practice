@@ -67,6 +67,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
+	uint32_t highway_star = 0;
+	highway_star = audio->LoadWave("highway-star.wav");
+	uint32_t on_the_highway = 0;
+	on_the_highway = audio->LoadWave("on-the-highway.wav");
+	uint32_t soundHandle = 0;
+
 	gameScene = new GameScene();
 
 	//while (true) {
@@ -80,6 +86,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		    timeCount = 0;
 		    //isClear = false;
 
+			soundHandle = audio->PlayWave(on_the_highway, true);
+
 			while (1) {
 				// メッセージ処理
 				if (win->ProcessMessage()) {
@@ -91,9 +99,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				// 入力関連の毎フレーム処理
 				input->Update();
 
-				ImGui::Begin("scene");
-				ImGui::Text("Title");
-				ImGui::End();
+				//ImGui::Begin("scene");
+				//ImGui::Text("Title");
+				//ImGui::End();
+
 
 				// 軸表示の更新
 				axisIndicator->Update();
@@ -134,9 +143,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				// 入力関連の毎フレーム処理
 				input->Update();
 
-				ImGui::Begin("scene");
-				ImGui::Text("Tutorial");
-				ImGui::End();
+				//ImGui::Begin("scene");
+				//ImGui::Text("Tutorial");
+				//ImGui::End();
 
 				// 軸表示の更新
 				axisIndicator->Update();
@@ -158,6 +167,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				// チュートリアルの毎フレーム処理
 				if (input->TriggerKey(DIK_SPACE)) {
+					// 音声停止
+				    audio->StopWave(soundHandle);
 					SCENE = GAME;
 					break;
 				}
@@ -166,6 +177,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		case GAME:
 		#pragma region ゲーム処理
+
+			// BGM
+		    soundHandle = audio->PlayWave(highway_star, true);
+
 			// メインループ
 			while (true) {
 				// メッセージ処理
@@ -200,11 +215,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			    timeCount++;
 			    if (timeCount >= 2830) {
 				    //isClear = true;
+					// 音声停止
+				    audio->StopWave(soundHandle);
 				    SCENE = END;
 				    break;
 				}
 				if (gameScene->IsPlayerAlive() == false) {
 				    //isClear = false;
+				    //  音声停止
+				    audio->StopWave(soundHandle);
 					SCENE = END;
 					break;
 				}
@@ -213,6 +232,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		case END:
 		#pragma region 終了処理
+
+			soundHandle = audio->PlayWave(on_the_highway, true);
 
 			while (1) {
 				// メッセージ処理
@@ -225,9 +246,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				// 入力関連の毎フレーム処理
 				input->Update();
 
-				ImGui::Begin("scene");
-				ImGui::Text("End");
-				ImGui::End();
+				//ImGui::Begin("scene");
+				//ImGui::Text("End");
+				//ImGui::End();
 
 				// 軸表示の更新
 				axisIndicator->Update();
@@ -254,6 +275,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				// クリアの毎フレーム処理
 				if (input->TriggerKey(DIK_SPACE)) {
+					// 音声停止
+				    audio->StopWave(soundHandle);
 					SCENE = TITLE;
 					break;
 				}
