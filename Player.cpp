@@ -192,6 +192,7 @@ void Player::Update(const ViewProjection viewProjection) {
 		// ワールド行列の更新
 		worldTransform3DReticle_.UpdateMatrix();
 
+		#ifdef _DEBUG
 		// デバッグ文字
 		ImGui::Begin("Player");
 		ImGui::Text("2DReticle:(%f,%f)", sprite2DReticle_->GetPosition().x, sprite2DReticle_->GetPosition().y);
@@ -200,10 +201,11 @@ void Player::Update(const ViewProjection viewProjection) {
 		ImGui::Text("3DReticle:(%+.2f,%+.2f,%+.2f)", worldTransform3DReticle_.translation_.x,
 		    worldTransform3DReticle_.translation_.y, worldTransform3DReticle_.translation_.z);
 		ImGui::End();
+		#endif
 	}
 
 	// キャラクター攻撃処理
-	Attack();
+	//Attack();
 
 	// 弾更新
 	//if (bullets_) {

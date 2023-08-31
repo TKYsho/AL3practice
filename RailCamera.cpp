@@ -40,6 +40,7 @@ void RailCamera::Update() {
 	// ビュー行列の転送
 	viewProjection_.TransferMatrix();
 
+	#ifdef _DEBUG
 	// カメラの座標を画面表示する処理
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat("transform.x", &worldTransform_.translation_.x, -100.0f, 100.0f);
@@ -49,4 +50,5 @@ void RailCamera::Update() {
 	ImGui::SliderFloat("rotation.y", &worldTransform_.rotation_.y, -10.0f, 10.0f);
 	ImGui::SliderFloat("rotation.z", &worldTransform_.rotation_.z, -10.0f, 10.0f);
 	ImGui::End();
+	#endif
 }

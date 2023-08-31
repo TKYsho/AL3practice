@@ -284,7 +284,7 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-	player_->DrawUI();
+	//player_->DrawUI();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
