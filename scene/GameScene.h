@@ -48,6 +48,11 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void DrawTitle();
+	void DrawTutorial();
+	void DrawClear();
+	void DrawOver();
+
 	/// <summary>
 	/// 敵を追加
 	/// </summary>
@@ -111,6 +116,16 @@ private: // メンバ変数
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
+	uint32_t titleTextureHandle_ = 0;
+	uint32_t tutorialTextureHandle_ = 0;
+	uint32_t clearTextureHandle_ = 0;
+	uint32_t overTextureHandle_ = 0;
+
+	// スプライト
+	Sprite* titleSprite_ = nullptr;
+	Sprite* tutorialSprite_ = nullptr;
+	Sprite* clearSprite_ = nullptr;
+	Sprite* overSprite_ = nullptr;
 
 	// 3Dモデル
 	Model* model_ = nullptr;

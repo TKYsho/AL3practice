@@ -13,6 +13,10 @@ GameScene::~GameScene() {
 	delete model_;
 	delete player_;
 	delete modelPlayer_;
+	delete titleSprite_;
+	delete tutorialSprite_;
+	delete clearSprite_;
+	delete overSprite_;
 	//delete enemy_;
 	for (Enemy* enemy : enemys_) {
 		delete enemy;
@@ -37,9 +41,19 @@ void GameScene::Initialize() {
 
 	// ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("car/car.png");
+	titleTextureHandle_ = TextureManager::Load("title.png");
+	tutorialTextureHandle_ = TextureManager::Load("tutorial.png");
+	clearTextureHandle_ = TextureManager::Load("clear.png");
+	overTextureHandle_ = TextureManager::Load("gameover.png");
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
+
+	// スプライト生成
+	titleSprite_ = Sprite::Create(titleTextureHandle_, {0, 0});
+	tutorialSprite_ = Sprite::Create(tutorialTextureHandle_, {0, 0});
+	clearSprite_ = Sprite::Create(clearTextureHandle_, {0, 0});
+	overSprite_ = Sprite::Create(overTextureHandle_, {0, 0});
 
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -276,6 +290,86 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::DrawTitle() { 
+		// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+#pragma region 前景スプライト描画
+	// 前景スプライト描画前処理
+	Sprite::PreDraw(commandList);
+
+	/// <summary>
+	/// ここに前景スプライトの描画処理を追加できる
+	/// </summary>
+
+	titleSprite_->Draw(); 
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+
+#pragma endregion
+
+}
+
+void GameScene::DrawTutorial() { 
+		// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+#pragma region 前景スプライト描画
+	// 前景スプライト描画前処理
+	Sprite::PreDraw(commandList);
+
+	/// <summary>
+	/// ここに前景スプライトの描画処理を追加できる
+	/// </summary>
+
+	tutorialSprite_->Draw(); 
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+
+#pragma endregion
+
+}
+
+void GameScene::DrawClear() { 
+		// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+#pragma region 前景スプライト描画
+	// 前景スプライト描画前処理
+	Sprite::PreDraw(commandList);
+
+	/// <summary>
+	/// ここに前景スプライトの描画処理を追加できる
+	/// </summary>
+
+	clearSprite_->Draw(); 
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+
+#pragma endregion
+
+}
+
+void GameScene::DrawOver() { 
+		// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+#pragma region 前景スプライト描画
+	// 前景スプライト描画前処理
+	Sprite::PreDraw(commandList);
+
+	/// <summary>
+	/// ここに前景スプライトの描画処理を追加できる
+	/// </summary>
+
+	overSprite_->Draw(); 
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+
+#pragma endregion
+
 }
 
 void GameScene::AddEnemy(Vector3 pos) {

@@ -23,7 +23,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		GAME,
 		END
 	} SCENE = TITLE;
-	bool isClear = false;
+	int timeCount = 0;
+	//bool isClear = false;
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
@@ -76,6 +77,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			// ゲームシーンの初期化
 			gameScene->Initialize();
 
+		    timeCount = 0;
+		    //isClear = false;
+
 			while (1) {
 				// メッセージ処理
 				if (win->ProcessMessage()) {
@@ -99,7 +103,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				// 描画開始
 				dxCommon->PreDraw();
 				// タイトルの描画
-				// gameScene->Draw();
+				gameScene->DrawTitle();
 				// 軸表示の描画
 				axisIndicator->Draw();
 				// プリミティブ描画のリセット
@@ -142,7 +146,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				// 描画開始
 				dxCommon->PreDraw();
 				// チュートリアルの描画
-				// gameScene->Draw();
+				gameScene->DrawTutorial();
 				// 軸表示の描画
 				axisIndicator->Draw();
 				// プリミティブ描画のリセット
@@ -192,8 +196,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				imguiManager->Draw();
 				// 描画終了
 				dxCommon->PostDraw();
-
+				// カウント加算
+			    timeCount++;
+			    if (timeCount >= 2830) {
+				    //isClear = true;
+				    SCENE = END;
+				    break;
+				}
 				if (gameScene->IsPlayerAlive() == false) {
+				    //isClear = false;
 					SCENE = END;
 					break;
 				}
@@ -226,11 +237,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				// 描画開始
 				dxCommon->PreDraw();
 				// 終了結果画面の描画
-				if (isClear == true) {
-					// クリアの描画
+			    if (gameScene->IsPlayerAlive() == true) {
+				    gameScene->DrawClear();
 				} 
 				else {
-					// ゲームオーバーの描画
+				    gameScene->DrawOver();
 				}
 				// 軸表示の描画
 				axisIndicator->Draw();
