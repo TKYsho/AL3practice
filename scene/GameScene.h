@@ -68,7 +68,7 @@ public: // メンバ関数
 	/// <summary>
 	/// AとBの距離を取得
 	/// </summary>
-	/// float GetDistance(const Vector3& posA, const Vector3& posB);
+	float GetDistance(const Vector3& posA, const Vector3& posB);
 
 	/// <summary>
 	/// 敵発生データの読み込み(csvから)
@@ -79,6 +79,12 @@ public: // メンバ関数
 	/// 敵発生コマンドの更新
 	/// </summary>
 	void UpdateEnemypopCommands();
+
+	/// <summary>
+	/// プレイヤーの生存フラグ取得
+	/// </summary>
+	/// <returns></returns>
+	bool IsPlayerAlive() { return player_->GetIsAlive(); }
 
 	/// <summary>
 	/// ビュープロジェクションの取得

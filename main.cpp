@@ -193,7 +193,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				// 描画終了
 				dxCommon->PostDraw();
 
-				if (input->TriggerKey(DIK_SPACE)) {
+				if (gameScene->IsPlayerAlive() == false) {
 					SCENE = END;
 					break;
 				}

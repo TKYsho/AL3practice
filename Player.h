@@ -90,6 +90,12 @@ public:
 	Vector3 Get3DReticleWorldPosition();
 
 	/// <summary>
+	/// 生存フラグ取得
+	/// </summary>
+	/// <returns>true:生存 false:死亡</returns>
+	bool GetIsAlive() { return isAlive_; }
+
+	/// <summary>
 	/// UI描画
 	/// </summary>
 	void DrawUI();
@@ -117,6 +123,9 @@ private:
 
 	// キーボード入力
 	Input* input_ = nullptr;
+
+	// 生存フラグ
+	bool isAlive_ = true;
 
 	// ゲームシーン
 	//GameScene* gameScene_ = nullptr;

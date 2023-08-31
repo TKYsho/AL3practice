@@ -34,6 +34,9 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 	// ビュープロジェクションをゲームシーンから取得
 	//viewProjection_ = gameScene_->GetViewProjection();
 
+	// 生存フラグ初期化
+	isAlive_ = true;
+
 	// 衝突属性を設定
 	SetCollisionAttribute(0x00000001);
 	// 衝突対象を自分の属性以外に設定
@@ -302,7 +305,7 @@ void Player::Attack() {
 }
 
 void Player::OnCollision() {
-	// 何もしない
+	isAlive_ = false;
 }
 
 void Player::SetParent(const WorldTransform* parent) { 
